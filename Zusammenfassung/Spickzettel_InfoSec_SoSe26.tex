@@ -1,0 +1,605 @@
+% Informationssicherheit SoSe 26 -- Spickzettel
+% Compile: pdflatex spickzettel_infosec.tex
+\documentclass[11pt,a4paper]{article}
+
+%% ---- Pakete ----
+\usepackage[top=4mm,bottom=4mm,left=4.5mm,right=4.5mm]{geometry}
+\usepackage{multicol}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{amsmath,amssymb}
+\usepackage[framemethod=default]{mdframed}
+\usepackage{alltt}
+
+%% ---- Farben ----
+\definecolor{hdr1}{HTML}{1a1a2e}
+\definecolor{hdr2}{HTML}{2c3e50}
+\definecolor{hdrtbl}{HTML}{3d3d3d}
+\definecolor{warnred}{HTML}{8B0000}
+\definecolor{goodgrn}{HTML}{006400}
+\definecolor{warnbg}{HTML}{fff8f8}
+\definecolor{goodbg}{HTML}{f8fff8}
+\definecolor{boxbg}{HTML}{fafafa}
+\definecolor{treebg}{HTML}{f5f5f5}
+\definecolor{codebg}{HTML}{f0f0f0}
+\definecolor{rowgray}{HTML}{f5f5f5}
+
+%% ---- Layout ----
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1pt}
+\setlength{\columnsep}{3mm}
+\setlength{\columnseprule}{0.4pt}
+\setlength{\multicolsep}{0pt}
+
+%% ---- Listen ----
+\setlist[itemize]{leftmargin=9pt,topsep=0.5pt,parsep=0pt,itemsep=0.3pt,label=\textbullet}
+\setlist[enumerate]{leftmargin=12pt,topsep=0.5pt,parsep=0pt,itemsep=0.3pt}
+
+%% ---- Tabellen: alle Spalten vertikal zentriert (m-Typ) ----
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.15}
+
+% X-Spalten (tabularx) ebenfalls m{} (mittig) statt p{} (oben)
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
+
+% Feste Breite, linksbündig, mittig -- für linke Spalte
+\newcolumntype{K}[1]{>{\raggedright\arraybackslash}m{#1}}
+% Auto-Breite, linksbündig, mittig -- füllt Rest
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+
+%% ---- Tabellenzeilen-Farbe ----
+% Kopfzeile (Zeile 1) immer dunkel, ab Zeile 2 abwechselnd hell
+\newcommand{\tabstart}{%
+  \rowcolors{2}{rowgray}{white}%
+}
+\newcommand{\tabend}{\rowcolors{1}{}{}}
+
+%% ---- Abschnittsbefehle ----
+\newcommand{\titlebanner}[1]{%
+  \noindent\colorbox{hdr1}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep}{\color{white}\bfseries\small #1}}%
+  \par\vspace{1.5pt}%
+}
+
+\newcommand{\h}[1]{%
+  \vspace{3pt}%
+  \noindent\colorbox{hdr2}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep}{\color{white}\bfseries #1}}%
+  \par\vspace{1pt}%
+}
+
+\newcommand{\hh}[1]{%
+  \vspace{2pt}%
+  \noindent\textbf{#1}\par%
+  {\color{gray}\hrule height 0.5pt}\par\vspace{0.5pt}%
+}
+
+%% ---- Boxen ----
+\mdfdefinestyle{infoS}{linecolor=black,linewidth=0.8pt,backgroundcolor=boxbg,%
+  innertopmargin=2pt,innerbottommargin=2pt,innerleftmargin=3pt,innerrightmargin=3pt,%
+  skipabove=1.5pt,skipbelow=1.5pt,nobreak=true}
+\mdfdefinestyle{warnS}{linecolor=warnred,linewidth=1pt,backgroundcolor=warnbg,%
+  innertopmargin=2pt,innerbottommargin=2pt,innerleftmargin=3pt,innerrightmargin=3pt,%
+  skipabove=1.5pt,skipbelow=1.5pt,nobreak=true}
+\mdfdefinestyle{goodS}{linecolor=goodgrn,linewidth=1pt,backgroundcolor=goodbg,%
+  innertopmargin=2pt,innerbottommargin=2pt,innerleftmargin=3pt,innerrightmargin=3pt,%
+  skipabove=1.5pt,skipbelow=1.5pt,nobreak=true}
+\mdfdefinestyle{treeS}{topline=false,rightline=false,bottomline=false,%
+  linecolor=black,linewidth=2pt,backgroundcolor=treebg,%
+  innertopmargin=1.5pt,innerbottommargin=1.5pt,innerleftmargin=3pt,innerrightmargin=3pt,%
+  skipabove=1.5pt,skipbelow=1.5pt}
+
+\newenvironment{ibox}{\begin{mdframed}[style=infoS]}{\end{mdframed}}
+\newenvironment{wbox}{\begin{mdframed}[style=warnS]}{\end{mdframed}}
+\newenvironment{gbox}{\begin{mdframed}[style=goodS]}{\end{mdframed}}
+\newenvironment{tbox}{\begin{mdframed}[style=treeS]\ttfamily\small}{\end{mdframed}}
+
+%% ---- Hilfsbefehle ----
+\newcommand{\warn}[1]{{\color{warnred}\textbf{#1}}}
+\newcommand{\good}[1]{{\color{goodgrn}\textbf{#1}}}
+\newcommand{\cd}[1]{{\small\ttfamily\colorbox{codebg}{\strut #1}}}
+% Tabellenkopfzelle
+\newcommand{\THH}[1]{\cellcolor{hdrtbl}\color{white}\textbf{#1}}
+% Mathematik
+\newcommand{\xor}{\oplus}
+\renewcommand{\Pr}{\mathrm{Pr}}
+
+%%=============================================================
+\begin{document}
+
+\titlebanner{Informationssicherheit SoSe\,26
+  \hfill Zusammenfassung (4\,Seiten, 11\,pt)}
+
+\begin{multicols}{2}
+
+%%========== SEITE 1 ==========
+
+\h{1 · Schutzziele \& Bedrohungen (STRIDE)}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.34\linewidth}L}
+\THH{Schutzziel} & \THH{Bedrohung / Gegenmaßnahme}\\
+\textbf{Authentizität}         & Spoofing $\to$ Signaturen, Zertifikate\\
+\textbf{Integrität}            & Tampering $\to$ MAC, AEAD, Hash\\
+\textbf{Nicht-Abstreitbarkeit} & Repudiation $\to$ Digitale Signatur\\
+\textbf{Vertraulichkeit}       & Information Disclosure $\to$ Verschlüsselung\\
+\textbf{Verfügbarkeit}         & Denial of Service $\to$ Rate-Limiting\\
+\textbf{Autorisierung}         & Privilege Escalation $\to$ ACLs\\
+\end{tabularx}
+\tabend
+
+\begin{itemize}
+\item \textbf{Kerckhoffs:} System sicher auch wenn alles außer Schlüssel bekannt
+  $\to$ kein Security by Obscurity
+\item \textbf{Bedrohung beseitigen} $>$ Schwachstelle absichern.
+  Risiko = Bedrohung $\times$ Schwachstelle. Sicherheit = Kosten-Nutzen
+\item \textbf{Angreifermodell:} beschreibt Fähigkeiten des Angreifers
+  (= erlaubte Einsatzumgebung). Strenger = stärker
+\end{itemize}
+
+\h{2 · Kryptographische Grundbegriffe}
+\begin{itemize}
+\item \textbf{Chiffre} $\Pi$=(E,D): $D(k,E(k,m))=m$.
+  \textbf{K}~Keyspace, \textbf{M}~Messagespace, \textbf{C}~Cipherspace
+\item \textbf{Schema} $\Pi$=(KGen,E,D): KGen randomisiert $\to k\in K$;
+  E darf randomisiert sein; D deterministisch.\\
+  \cd{r$\leftarrow$A(x)} randomisiert; \cd{y:=A(x)} deterministisch
+\item \textbf{Klassische Chiffren:} Caesar K=$\{3\}$, ROT K=$\{0..25\}$.
+  Problem: \textbf{Häufigkeitsanalyse} -- PT-Statistik im CT sichtbar.
+\end{itemize}
+
+\h{3 · Perfect Secrecy \& One-Time-Pad}
+\begin{itemize}
+\item \textbf{XOR:} $a\xor a=0$, $a\xor 0=a$, $a\xor b\xor b=a$,
+  selbstinvers, assoziativ, kommutativ
+\item \textbf{OTP:} $K=M=C=\mathbb{B}^n$, $k$ uniform.
+  $E(k,m)=m\xor k$,\; $D(k,c)=c\xor k$
+\end{itemize}
+\begin{ibox}
+\textbf{Perfect Secrecy:} $\Pr[M=m\mid C=c]=\Pr[M=m]$ für alle $m,c$
+$\to$ CT verrät \textbf{nichts} über PT\\
+\textbf{Orakel-Spiel:} kein poly-Zeit-Angreifer gewinnt Unterscheidungsspiel
+mit $\Pr>\tfrac{1}{2}$ (Raten $=\tfrac{1}{2}$)\\
+\textbf{Schranke:} P.S.\ $\Rightarrow |K|\ge|M|$
+(bei $|K|<|M|$: $\exists m$ mit $\Pr[C=c\mid M=m]=0$)\\
+\textbf{Shannon-Satz} ($|K|{=}|M|{=}|C|$): P.S.\ $\Leftrightarrow$
+(i) $k$ uniform \textbf{und} (ii) zu $(m,c)$ genau ein $k$ mit $E_k(m)=c$
+\end{ibox}
+\begin{itemize}
+\item \textbf{Bayes:}
+  $\Pr[M{=}m|C{=}c]=\frac{\Pr[C{=}c|M{=}m]\cdot\Pr[M{=}m]}{\Pr[C{=}c]}
+  \Rightarrow \Pr[E_k(m){=}c]$ unabhängig von $m$
+\item \warn{OTP:} Schlüssel so lang wie Nachricht; echter Zufall; nie zweimal!
+\end{itemize}
+
+\h{4 · Block- \& Streamchiffren}
+\begin{itemize}
+\item \textbf{AES} (Blockchiffre): Block immer 128\,Bit;
+  Schlüssel 128/192/256\,Bit. NIST 2001
+\item \textbf{ChaCha20} (Streamchiffre): Keystream aus (Key+Nonce) $\xor$ PT.
+  TLS~1.3 Standard. RC4 = \warn{unsicher}
+\end{itemize}
+\begin{wbox}
+\textbf{Nonce-Reuse:} Gleiche (Nonce,Key) $\Rightarrow$ gleicher Keystream
+$\Rightarrow c\xor c'=m\xor m'$ (statistisch analysierbar).
+Verfahren \textbf{komplett gebrochen!}\\
+\end{wbox}
+
+\h{5 · Betriebsmodi ($>$1 Block)}
+\begin{itemize}
+\item \textbf{PKCS\#7 Padding:} fehlende Bytes mit Wert=Anzahl füllen (1..16).
+  Voller Extrablock wenn $|m|\bmod n=0$. Letztes Byte = Anzahl. Injektiv.
+\end{itemize}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.13\linewidth}L}
+\THH{Modus} & \THH{Verschlüsselung / Eigenschaften}\\
+\textbf{ECB} & $c_i=E(k,m_i)$. Pad: ja.
+  \warn{NIE! Gleiche Blöcke $\to$ gleiche CT (Pinguin-Angriff)}\\
+\textbf{CTR} & $c_i=E(k,N_i)\xor m_i$, $N_i=N\|i$.
+  Pad: nein. Streamcipher-artig, parallelisierbar, nur $E()$ nötig.
+  $N$ = Nonce($n$\,Bit)$\|$Counter($r$\,Bit), $n{+}r=128$.
+  Max.\ Blöcke pro $(N,K)$: $2^r$\\
+\textbf{CBC} & $c_i=E(k,m_i\xor c_{i-1})$, $c_0{=}$IV.
+  Pad: ja. Sequentiell. $D$: $m_i=D(k,c_i)\xor c_{i-1}$\\
+\end{tabularx}
+\tabend
+
+\hh{IV/CT-Manipulation (Malleability)}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.13\linewidth}K{0.42\linewidth}L}
+\THH{Modus} & \THH{Bit-Flip in CT} & \THH{IV-Änderung}\\
+\textbf{CTR} & Flip $c_i$-Bit $\Rightarrow$ exakt selbes PT-Bit flippt (gezielte!) & ganzer Keystream korrupt\\
+\textbf{CBC} & Flip $c_{i-1}$-Bit $\Rightarrow$ flippt $m_i$-Bit;
+  $m_{i-1}$ komplett kaputt & nur 1.\ Block betroffen\\
+\end{tabularx}
+\tabend
+
+\begin{wbox}
+\textbf{CTR \& CBC: nur Vertraulichkeit, keine Integrität!}
+Für aktiven Angreifer $\to$ AEAD!
+\end{wbox}
+\textbf{Vaudenay Padding Oracle:} Angreifer erfährt ob Padding falsch
+$\to$ CBC-CT entschlüsselbar. Bsp: ASP.NET, \textbf{POODLE} (SSL~3.0).
+
+\h{6 · Angreifermodelle}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.12\linewidth}L}
+\THH{Modell} & \THH{Fähigkeit / Beispiel}\\
+\textbf{EAV} & nur Challenge-CT -- ECB bereits hier unsicher\\
+\textbf{KPA} & $(m,c)$-Paare bekannt -- ROT sofort gebrochen\\
+\textbf{CPA} & Verschlüsselungs-Orakel -- Midway, Web-Embedding\\
+\textbf{CCA} & Ver- \textbf{und} Entschlüsselungs-Orakel -- Router leitet CT\\
+\end{tabularx}
+\tabend
+
+\begin{ibox}
+\textbf{PRF:} Angreifer kann $F(k,\cdot)$ nicht von Zufallsfunktion unterscheiden.\\
+AES-CTR/CBC: \good{CPA-sicher} (falls AES PRF), \warn{nicht CCA} (malleable)\\
+AES-GCM: \good{CCA-sicher} (AEAD, Manipulation vor Entschlüsselung erkannt)
+\end{ibox}
+
+\h{7 · MAC \& Authenticated Encryption}
+\begin{itemize}
+\item \textbf{MAC} $M_k(m)$: Tag $T$ -- schützt \textbf{Integrität + Authentizität}
+  (keine Vertraulichkeit!). Ziel: kein forgery under chosen-message.
+  Konstruktionen: HMAC, Poly1305, CMAC
+\end{itemize}
+\begin{ibox}
+\textbf{AE/AEAD:} $E(K,P)=(C,T)$; $D(K,C,T)=P$ oder \textbf{error}.
+Erkennt Manipulation VOR Entschlüsselung $\to$ CCA-sicher.\\
+\textbf{AES-GCM:} populärstes AEAD.
+\textbf{ChaCha20-Poly1305:} TLS~1.3.\\
+\textbf{Encrypt-then-MAC:} erst CT, dann MAC -- alles andere unsicher!
+Nie selbst implementieren.\\
+\end{ibox}
+
+%%========== SEITE 2 ==========
+
+\h{8 · Hashfunktionen \& Passwörter}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.3\linewidth}L}
+\THH{Eigenschaft} & \THH{Definition (Stärke: stark $\to$ schwach)}\\
+\textbf{Kollisionsresistenz} & schwer $x\ne x'$ mit $f(x)=f(x')$\\
+\textbf{Second-Preimage}     & zu $x$ finde $x'\ne x$ mit $f(x)=f(x')$\\
+\textbf{Preimage}            & zu $y$ finde $x$ mit $f(x)=y$\\
+\end{tabularx}
+\tabend
+
+\begin{itemize}
+\item \warn{MD5 (gebrochen 2005)}, \warn{SHA-1 (gebrochen)};
+  \good{SHA-2} (SHA-256/384/512); SHA-3; BLAKE2
+\item Commitment: $H(\mathrm{salt}\|b)$ veröffntl., später öffnen.
+  Integritätscheck: $H(\mathrm{Daten})$ sicher übermitteln
+\item \textbf{Geburtstagsparadoxon:} $M$ Werte $\to \approx\!\sqrt{M}$
+  Objekte für Kollision ${>}50\%$. $n$-Bit-Hash: Kollision nach $\approx 2^{n/2}$
+\end{itemize}
+\hh{Passwort-Hashing-Evolution}
+\begin{tbox}
+H(pw) $\to$ Rainbow-Table angreifbar\\
+$\to$ H(salt$\|$pw), Salt zufällig pro Nutzer $\to$ Vorab-DB nutzlos\\
+$\to$ HW zu schnell $\to$ KDF (langsam, memory-hard)
+\end{tbox}
+
+\h{9 · Key-Derivation-Functions (KDF)}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.25\linewidth}K{0.32\linewidth}L}
+\THH{Typ} & \THH{Algorithmen} & \THH{Zweck}\\
+\textbf{Passwort-KDF} & Argon2, bcrypt, scrypt, PBKDF2
+  & langsam, memory-hard, HW-resistent\\
+\textbf{Schlüssel-KDF} & HKDF
+  & schnell; \warn{NICHT für Passwörter!}\\
+\end{tabularx}
+\tabend
+
+\begin{itemize}
+\item Argon2-Parameter: \textbf{i}=Iterationen, \textbf{m}=Speicher,
+  \textbf{p}=Parallelismus. Speichern: \cd{(salt, Argon2(salt,pw,p.))}
+\end{itemize}
+
+\h{10 · Zufallszahlen (RNG)}
+\begin{itemize}
+\item \warn{PRNG (nie für Krypto!):} java.util.Random,
+  Python \cd{random()} -- vorhersagbar, rückrechenbar
+\item \good{CSPRNG:} Linux: \cd{/dev/urandom}, \cd{getrandom()};
+  Windows: \cd{BCryptGenRandom}; Intel rdrand (nur 1 Quelle)
+\item \warn{Boot-Zeit = wenig Entropie!} HW-RNG nur eine Quelle von mehreren
+\end{itemize}
+\begin{ibox}
+\textbf{Fortuna (FreeBSD):} Zustand $S=(C,K)$.
+GenerateBlocks: $r\|{=}E_K(C);\; C\!{+\!+}$.
+Key-Rekeying $K\leftarrow$GenerateBlocks$(S,2)$ nach Output.\\
+\textbf{Backtracking:} aus $K_i$ nicht $K_{i-1}$ berechenbar
+(Vergangenheit geheim)\\
+\textbf{Forward Security:} neuer Zustand bei unbekanntem $K$ uniform
+\end{ibox}
+
+\h{11 · RSA}
+\begin{itemize}
+\item Setup: $p,q$ prim; $N=p\cdot q$;\;
+  $e\cdot d\equiv 1\!\pmod{(p-1)(q-1)}$.
+  Public $(e,N)$, Private $(d,N)$
+\item Enc: $c=m^e\bmod N$.\quad Dec: $m=c^d\bmod N$.
+  Korrektheit: $c^d=m^{ed}=m$ (Euler/Fermat)
+\end{itemize}
+\begin{ibox}
+\textbf{Rechenrezept:} Square-and-Multiply --
+\textbf{nach jedem Schritt $\bmod N$!}\\
+$x\bmod N = x - \lfloor x/N\rfloor\cdot N$.\\
+Bsp: $N{=}187$, $e{=}3$, $m{=}11$:
+$11^3{=}1331 \bmod 187 = 1331-7{\cdot}187 = \mathbf{22}$\\
+DH-Bsp: $N{=}17$, $g{=}3$, $a{=}3$:
+$A=3^3{=}27 \bmod 17=\mathbf{10}$.
+$B{=}9$: $K=9^3{=}729 \bmod 17=\mathbf{15}$
+\end{ibox}
+\begin{wbox}
+Textbuch-RSA ohne Padding unsicher!
+Praxis: RSA-OAEP (Verschlüsselung), RSA-PSS (Signatur)
+\end{wbox}
+
+\h{12 · Diffie-Hellman \& ECC}
+\begin{itemize}
+\item \textbf{DH:} $N$ prim, $g$ Generator.
+  Alice: $a\leftarrow\mathrm{rand}$, schickt $A=g^a\!\bmod N$.
+  Bob: $b\leftarrow\mathrm{rand}$, schickt $B=g^b\!\bmod N$.
+  Gemeinsam: $K=B^a=A^b=g^{ab}\!\bmod N$
+\item Sicherheit: Diskreter Logarithmus ($a$ aus $g^a\bmod N$) schwer
+\end{itemize}
+\begin{wbox}
+\textbf{DH ohne Auth $\to$ MITM!} Eve macht 2 separate Austausche.
+Fix: Signaturen + Zertifikate (ECDHE-Variante in TLS)
+\end{wbox}
+\begin{itemize}
+\item \textbf{ECC:} $\approx$256\,Bit ECC $\approx$ RSA-3072.
+  Schneller, kleinere Schlüssel
+\item \textbf{Quanten/Shor:} bricht RSA, DH, ECC.
+  Q-Day $\approx$2029. \textbf{Post-Quantum:}
+  ML-KEM (Kyber, KEX), ML-DSA (Dilithium, Sig.)
+\item \textbf{PFS:} ephemere (EC)DHE-Schlüssel nach Session gelöscht
+  $\to$ aufgezeichneter Traffic nicht entschlüsselbar.
+  ,,Harvest now, decrypt later''
+\end{itemize}
+
+\h{13 · Digitale Signaturen}
+\begin{itemize}
+\item $\mathrm{Sign}_{\mathrm{priv}}(m)=\sigma$;\;
+  $\mathrm{Verify}_{\mathrm{pub}}(m,\sigma)=\mathrm{true/false}$
+\item Gibt: \textbf{Authentizität + Integrität + Nicht-Abstreitbarkeit}
+\item RSA-PSS, ECDSA. Sicher unter EUF-CMA.
+  In Praxis: $\mathrm{Sign}(H(m))$ (für große Nachrichten)
+\end{itemize}
+
+\h{14 · PKI \& X.509-Zertifikate}
+\begin{itemize}
+\item \textbf{Zertifikat:} Subject (Identität) an Public Key gebunden,
+  signiert vom Issuer.
+  Felder: Subject, Issuer, Valid From/Until, PublicKey,
+  Extensions (CA-Flag, pathlen), Signatur
+\end{itemize}
+\begin{tbox}
+Kette: Blatt(Server) $\to$ Zwischen-CA $\to$ Root-CA\\
+Root: Subject=Issuer (self-signed). Issuer[i] = Subject[i+1]
+\end{tbox}
+\textbf{Gültigkeitsprüfung -- alle 4 Bedingungen:}
+\begin{enumerate}
+\item \textbf{Signaturen} jedes Zertifikats verifizieren
+  (mit Public Key des Issuers)
+\item \textbf{Zeit:} Valid From $\le$ jetzt $\le$ Valid Until für
+  \textbf{jedes} Zertifikat
+\item \textbf{Constraints:} CA=true für Zwischen-CAs;
+  pathlen=$k$ $\to$ max.\ $k$ CAs unterhalb
+\item \textbf{Trust Anchor:} Root-CA im \textbf{Client Trust Store}
+  (vorkonfiguriert!)
+\end{enumerate}
+
+\h{15 · Kerberos}
+\begin{itemize}
+\item \textbf{KDC} = AS (Auth.\ Server) + TGS (Ticket Granting Server).
+  Kennt Langzeit-Schlüssel aller Nutzer/Dienste
+\item Login $\to$ TGT vom AS $\to$ Service-Ticket vom TGS $\to$ Dienst
+\end{itemize}
+\begin{wbox}
+\textbf{KDC kompromittiert:} kennt alle Langzeit-Schlüssel $\to$
+kann beliebige Tickets ausstellen $\to$ jede Identität vortäuschen.
+KDC = Single Point of Trust/Failure!
+\end{wbox}
+
+\newpage
+%%========== SEITE 3 ==========
+
+\h{16 · Human Authentication (Passwörter \& 2FA)}
+\begin{itemize}
+\item \textbf{Speichern:} nie Klartext! $\to$ \cd{(salt, KDF(salt, pw))}
+  mit zufälligem Salt pro Nutzer; KDF = Argon2/bcrypt
+\item \textbf{Faktoren:} Wissen (PW), Besitz (Token), Inhärenz (Bio).
+  2FA = mind.\ 2 verschiedene Faktoren
+\item \textbf{TOTP:} Codes nur einmal nutzbar.
+  $\mathrm{Sign}_{\mathrm{priv}}(\mathrm{Challenge})$ beweist Key-Besitz.
+\end{itemize}
+
+\h{17 · Netzwerksicherheit -- Grundangriffe}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.22\linewidth}L}
+\THH{Angriff} & \THH{Beschreibung / Gegenmaßnahme}\\
+\textbf{Spoofing}   & falsche Identität $\to$ Signaturen, Zertifikate\\
+\textbf{MITM}       & dazwischensetzen $\to$ AEAD + Auth.\\
+\textbf{Replay}     & Msg erneut einspielen $\to$ Nonce/Timestamp/Seq.\\
+\textbf{Reflection} & Antworten umlenken/verstärken $\to$ asym.\ Proto.\\
+\textbf{DoS}        & Verfügbarkeit $\to$ Rate-Limiting, Puzzle\\
+\textbf{Downgrade}  & schwächere Version erzwingen $\to$ Transcript, HSTS\\
+\end{tabularx}
+\tabend
+
+\begin{ibox}
+\textbf{Replay-Analyse:} Nonce/Timestamp muss von \textbf{jedem} Partner
+frisch erzeugt und im MAC \textbf{gebunden} sein.
+DH+Sign schützt Schlüssel, aber nicht den Austausch selbst
+$\to$ Replay möglich, gleicher $K_0$!\\
+\textbf{PFS-Update:} $K_{i+1}=H(K_i)$ nach jeder Msg
+$\to$ Forward Secrecy
+\end{ibox}
+
+\h{18 · TLS 1.2 -- Handshake}
+\begin{tbox}
+C$\to$S: ClientHello(Ver, Random\_C, SessionID,\\
+\hspace*{7mm} CipherSuites[, SessionTicket])\\
+S$\to$C: ServerHello(Ver, Random\_S, Suite)\\
+S$\to$C: Certificate\\
+S$\to$C: ServerKeyExchange(g,N,g\^{}a; Sig.)[bei DHE]\\
+S$\to$C: ServerHelloDone\\
+C$\to$S: ClientKeyExchange(g\^{}b) [PMS=g\^{}\{ab\}]\\
+C$\to$S: ChangeCipherSpec · Finished\\
+S$\to$C: ChangeCipherSpec · Finished\\
+MS=PRF(PMS,"master secret",RC||RS) $\to$ 4 Session-Keys
+\end{tbox}
+\begin{itemize}
+\item \textbf{Ciphersuite (1.2):} KEX-Auth-Cipher-MAC.
+  Bsp: \texttt{ECDHE-RSA-AES256-GCM-SHA384}
+\item \textbf{Session-Ticket:} im ClientHello in Extension
+  \texttt{session\_ticket}. Akzeptiert wenn Server mit
+  ServerHello + ChangeCipherSpec + Finished antwortet
+  (kein Cert/SKE = abgekürzter Handshake)
+\item \textbf{Gewählte Suite:} steht im \textbf{ServerHello}
+\end{itemize}
+
+\h{19 · TLS 1.3 -- Vergleich}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.28\linewidth}L}
+\THH{Aspekt} & \THH{TLS 1.2 vs.\ TLS 1.3}\\
+\textbf{Handshake-RTT}  & 1.2: 2 RTT, RSA oder (EC)DHE $|$
+  1.3: 1 RTT, nur (EC)DHE (PFS immer)\\
+\textbf{Ciphersuite}    & 1.2: KEX-Auth-Cipher-MAC $|$
+  1.3: \texttt{TLS\_<AEAD>\_<HASH>} (2 Teile, nur AEAD)\\
+\textbf{Handshake-Auth} & 1.2: ServerKeyExchange+Sig $|$
+  1.3: \textbf{CertificateVerify} (Sign.\ über Transcript)\\
+\textbf{Resumption}     & 1.2: Session-ID/Ticket $|$
+  1.3: PSK (Pre-Shared Key)\\
+\end{tabularx}
+\tabend
+
+\begin{ibox}
+\textbf{TLS~1.3 Ciphersuites:} \texttt{TLS\_AES\_256\_GCM\_SHA384}
+$\cdot$ \texttt{TLS\_CHACHA20\_POLY1305\_SHA256}
+$\cdot$ \texttt{TLS\_AES\_128\_GCM\_SHA256}\\
+\textbf{CertificateVerify:} Server signiert Transcript mit priv.\ Key
+$\to$ (1)~Authentizität, (2)~Integrität (kein Downgrade),
+(3)~Zertifikat an KEX gebunden\\
+\textbf{Finished:} PRF über alle HS-Nachrichten -- schützt vor
+nachträglicher Manipulation
+\end{ibox}
+
+\textbf{PFS:} ephemere (EC)DHE-Werte gelöscht $\to$ Key-Diebstahl
+gibt Traffic nicht preis. ,,Harvest now, decrypt later'' $\to$ PFS schützt.
+\textbf{E2E:} TLS nur bis Server (kein E2E mit Proxy!);
+Signal/WhatsApp: echtes E2E.
+
+\h{21 · Downgrade-Angriffe}
+\begin{itemize}
+\item Angreifer manipuliert ClientHello $\to$ streicht starke Suites
+  $\to$ Server wählt schwache Suite
+\item \textbf{POODLE:} SSL~3.0 Fallback erzwingen $\to$
+  Padding Oracle auf CBC
+\item \textbf{FREAK:} schwache RSA-Exportkeys erzwingen.
+  \textbf{SMACK/SLOTH:} MD5 in TLS erzwingen
+\item \textbf{Fix TLS~1.3:} CertificateVerify über Transcript
+  $\to$ unbemerkte Modifikation unmöglich
+\end{itemize}
+
+\h{22 · Protokoll-Sicherheitsanalyse -- Rezept}
+\begin{ibox}
+\textbf{1.\ Schutzziele:} Vertraulichkeit, Integrität, Auth., Replay, PFS?\\
+\textbf{2.\ Primitive:} CPA oder CCA? AEAD? Signatur? MAC über was?\\
+\textbf{3.\ Angriffsvektoren:}
+\begin{itemize}[topsep=0pt,itemsep=0pt,parsep=0pt]
+\item Replay? $\to$ fehlt Freshness (Nonce im MAC gebunden?)
+\item MITM? $\to$ fehlt Auth.\ des KEX?
+\item Downgrade? $\to$ Transcript gebunden?
+\item Malleability? $\to$ CTR/CBC ohne MAC?
+\item Nonce-Reuse? $\to$ Wie wird Nonce gewählt?
+\end{itemize}
+\textbf{4.\ Fix:} AEAD statt CPA; Nonce für Freshness;
+Sign für Auth.; Transcript-Hash gegen Downgrade
+\end{ibox}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.25\linewidth}L}
+\THH{Problem} & \THH{Symptom / Fix}\\
+Keine Integrität  & CTR/CBC, Bit-Flip im CT $\to$ AES-GCM\\
+Replay            & gültige Msg erneut akzeptiert $\to$ Nonce/Seq.\ im MAC\\
+MITM bei KEX      & DH ohne Auth $\to$ Signaturen + Zertifikate\\
+Padding Oracle    & CBC + Fehler-Info $\to$ Encrypt-then-MAC; AEAD\\
+Nonce-Reuse       & gleiche $(K,N)$ $\to$ Counter-Nonce erzwingen\\
+Downgrade         & ClientHello manipuliert $\to$ Transcript signieren\\
+Kompression+Enc   & CRIME/BREACH: CT-Länge verrät PT $\to$
+  kein Komprimieren wenn Angreifer PT beeinflusst\\
+PRNG statt CSPRNG & vorhersagbare Keys $\to$ \cd{/dev/urandom}\\
+\end{tabularx}
+\tabend
+
+\newpage
+%%========== SEITE 4 ==========
+
+\h{23 · Schnell-Entscheidungen}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.35\linewidth}L}
+\THH{Ziel} & \THH{Verfahren}\\
+Vertraulichkeit (passiv)     & AES-CTR oder AES-CBC\\
+Vertr.\ + Integrität (aktiv) & AES-GCM / ChaCha20-Poly1305\\
+nur Integrität               & HMAC / Poly1305 / CMAC\\
+Schlüsselaustausch (PFS)     & ECDHE / DHE $\to$ danach auth.!\\
+Authentifizierung / Signatur & RSA-PSS / ECDSA + PKI\\
+Passwort speichern           & Salt + Argon2 (nie $H(\text{pw})$ allein!)\\
+Krypto-Zufallszahlen         & \cd{/dev/urandom}; \cd{BCryptGenRandom}\\
+Hash / Integritätscheck      & SHA-256/384/512\\
+\end{tabularx}
+\tabend
+
+\begin{wbox}
+\textbf{NIE:} ECB $\cdot$ MD5/SHA-1 für Sig.\ $\cdot$ RC4 $\cdot$
+Nonce/Schlüssel doppelt $\cdot$ \cd{java.util.Random}/\cd{random()}
+für Krypto $\cdot$ OTP-Schlüssel wiederverwenden $\cdot$
+Krypto selbst implementieren $\cdot$ RSA ohne Padding $\cdot$
+DH ohne Authentifizierung
+\end{wbox}
+
+\h{25 · Klausur-Schnellreferenz}
+
+\tabstart
+\begin{tabularx}{\linewidth}{K{0.3\linewidth}L}
+\THH{Aufgabentyp} & \THH{Antwort}\\
+Schema $X$ gg.\ $Y$ sicher? &
+  CTR/CBC $\to$ CPA (wenn AES PRF), nicht CCA.
+  GCM $\to$ CCA. OTP $\to$ Perfect Secrecy
+  ($|K|\ge|M|$, $k$ uniform, nie zweimal!)\\
+MAC $M'=M\|\mathrm{const}$? &
+  Sicher: abtrennbar, Fälschen erfordert $M(k,m)$ $\to$ kein Vorteil\\
+Zertifikatskette &
+  Issuer[i]=Subj[i+1]; Root: Subj=Iss;
+  Zeit, pathlen, CA-Flag, TrustStore?\\
+Protokoll-Analyse &
+  1.Schutzziele $\to$ 2.Primitive $\to$
+  3.Freshness/Auth/Transcript? $\to$ 4.Fix\\
+Modus \& RSA &
+  Aktiv$\to$AEAD; passiv$\to$CTR/CBC; nie ECB.
+  $c=m^e\bmod N$, Square-and-Multiply\\
+DH-MITM &
+  Eve macht 2 Austausche $\to$ kennt beide Session-Keys
+  $\to$ kein echtes Shared Secret\\
+\end{tabularx}
+\tabend
+
+\end{multicols}
+\end{document}
