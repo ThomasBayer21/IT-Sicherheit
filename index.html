@@ -55,6 +55,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--serif);font-size:1
 .sec:nth-child(5){animation-delay:.20s}.sec:nth-child(6){animation-delay:.24s}
 .sec:nth-child(7){animation-delay:.28s}.sec:nth-child(8){animation-delay:.32s}
 .sec:nth-child(9){animation-delay:.36s}.sec:nth-child(10){animation-delay:.40s}
+.sec:nth-child(11){animation-delay:.44s}.sec:nth-child(12){animation-delay:.48s}
+.sec:nth-child(13){animation-delay:.52s}.sec:nth-child(14){animation-delay:.56s}
 @keyframes fu{to{opacity:1;transform:none}}
 
 .sec-hd{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--border)}
@@ -177,6 +179,16 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
 .q-opt.wrong{background:rgba(224,84,84,.1);border-color:var(--red);color:var(--red)}
 .q-fb{margin-top:8px;font-size:12.5px;color:var(--text2);display:none;font-style:italic;line-height:1.5}
 
+/* Freq analysis bars */
+.fa-col{display:inline-flex;flex-direction:column;align-items:center;width:22px;vertical-align:bottom}
+.fa-bar{width:16px;border-radius:2px 2px 0 0;min-height:1px;background:var(--accent);opacity:.85}
+.fa-ref{width:16px;height:2px;background:var(--teal);opacity:.65}
+.fa-lbl{font-family:var(--mono);font-size:9px;color:var(--text3);text-align:center;width:22px;margin-top:2px}
+.fa-dec{font-family:var(--mono);font-size:8.5px;color:var(--purple);text-align:center;width:22px}
+/* Chain diagram */
+.chain-box{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:10px 14px;font-size:12.5px;position:relative}
+.chain-box .cb-type{font-family:var(--sans);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.chain-arrow{text-align:center;font-size:18px;color:var(--text3);margin:2px 0;line-height:1}
 /* Responsive */
 @media(max-width:900px){#sidebar{display:none}#main{margin-left:0;padding:24px 20px}}
 </style>
@@ -199,12 +211,19 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
   <a class="nav-link" href="#v6" onclick="navTo('v6');return false"><span class="nav-num">06</span>Hash &amp; KDFs</a>
   <a class="nav-link" href="#v7" onclick="navTo('v7');return false"><span class="nav-num">07</span>MACs &amp; Asymm. Krypto</a>
   <a class="nav-link" href="#v8" onclick="navTo('v8');return false"><span class="nav-num">08</span>Post-Quantum &amp; CSPRNG</a>
+  <a class="nav-link" href="#v9" onclick="navTo('v9');return false"><span class="nav-num">09</span>Netzwerksicherheit</a>
+  <a class="nav-link" href="#v10" onclick="navTo('v10');return false"><span class="nav-num">10</span>TLS &amp; Downgrade</a>
+  <a class="nav-link" href="#v11" onclick="navTo('v11');return false"><span class="nav-num">11</span>PKI &amp; Authentifizierung</a>
 
   <div class="s-head">Tools</div>
   <a class="nav-link" href="#tool-caesar" onclick="navTo('tool-caesar');return false"><span class="nav-num">→</span>Caesar-Chiffre</a>
+  <a class="nav-link" href="#tool-freq" onclick="navTo('tool-freq');return false"><span class="nav-num">→</span>Häufigkeitsanalyse</a>
   <a class="nav-link" href="#tool-xor" onclick="navTo('tool-xor');return false"><span class="nav-num">→</span>XOR / OTP</a>
   <a class="nav-link" href="#tool-padding" onclick="navTo('tool-padding');return false"><span class="nav-num">→</span>PKCS#7 Padding</a>
   <a class="nav-link" href="#tool-dh" onclick="navTo('tool-dh');return false"><span class="nav-num">→</span>Diffie-Hellman</a>
+  <a class="nav-link" href="#tool-rsa" onclick="navTo('tool-rsa');return false"><span class="nav-num">→</span>RSA Rechner</a>
+  <a class="nav-link" href="#tool-birthday" onclick="navTo('tool-birthday');return false"><span class="nav-num">→</span>Geburtstagsparadoxon</a>
+  <a class="nav-link" href="#tool-tls" onclick="navTo('tool-tls');return false"><span class="nav-num">→</span>TLS Ciphersuite</a>
 
   <div class="s-head">Abschluss</div>
   <a class="nav-link" href="#quiz" onclick="navTo('quiz');return false"><span class="nav-num">→</span>Quiz</a>
@@ -221,8 +240,10 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     <span class="chip">AES · RSA · ECC</span>
     <span class="chip">Hash &amp; KDFs</span>
     <span class="chip">Angreifermodelle</span>
+    <span class="chip">TLS 1.3 · PKI</span>
     <span class="chip">Post-Quantum</span>
     <span class="chip">CSPRNGs</span>
+    <span class="chip">Kerberos · 2FA</span>
   </div>
 </div>
 
@@ -392,6 +413,27 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     <label class="tg"><span style="font-family:var(--sans);font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.06em;text-transform:uppercase">Ciphertext</span></label>
     <div class="out" id="co"></div>
     <div id="ca" style="font-family:var(--mono);font-size:11.5px;color:var(--text3);margin-top:7px;letter-spacing:.1em"></div>
+  </div>
+
+  <!-- Häufigkeitsanalyse Tool -->
+  <div class="tool" id="tool-freq">
+    <div class="tool-title">Häufigkeitsanalyse — Caesar entschlüsseln</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:10px">Gib einen verschlüsselten Text ein. Der häufigste Buchstabe im Deutschen ist <strong>E (17,4%)</strong>. Verschiebe k so, dass der häufigste Ciphertext-Buchstabe auf E zeigt.</p>
+    <div class="tool-row">
+      <div class="tg"><label>Ciphertext</label>
+        <textarea id="fa-in" rows="2" style="resize:vertical;font-size:12px;font-family:var(--mono)" oninput="freqAnalysis()">KHOOR ZRUOG</textarea>
+      </div>
+    </div>
+    <div id="fa-chart" style="margin:10px 0 2px"></div>
+    <div id="fa-legend" style="margin-bottom:6px;font-size:9.5px;color:var(--text3)"></div>
+    <div class="tool-row">
+      <div class="tg"><label>Schlüssel k = <span id="fa-kv">0</span>&nbsp; (Entschlüsselungs-Shift)</label>
+        <input type="range" id="fa-sh" min="0" max="25" value="0" oninput="document.getElementById('fa-kv').textContent=this.value;freqAnalysis()">
+      </div>
+    </div>
+    <div id="fa-info" style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-bottom:6px"></div>
+    <div style="font-family:var(--sans);font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em">Entschlüsselt (k=<span id="fa-kv2">0</span>)</div>
+    <div class="out" id="fa-out" style="min-height:36px"></div>
   </div>
 </section>
 
@@ -738,31 +780,42 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     <div>
       <h3>Angreifermodelle (schwach → stark)</h3>
       <div class="viz">
-        <svg viewBox="0 0 240 170" style="width:100%;height:auto" font-family="var(--sans)" font-size="11">
+        <svg viewBox="0 0 260 198" style="width:100%;height:auto" font-family="var(--sans)" font-size="11">
           <!-- CCA (strongest) -->
-          <rect x="10" y="10" width="220" height="44" rx="5" fill="rgba(224,84,84,.08)" stroke="var(--red)" stroke-width="1.5"/>
-          <text x="20" y="28" fill="var(--red)" font-weight="700" font-size="12">CCA – Chosen Ciphertext</text>
-          <text x="20" y="43" fill="var(--text3)" font-size="10">Angreifer kann beliebige C zur Entschlüsselung einreichen</text>
+          <rect x="10" y="10" width="220" height="38" rx="5" fill="rgba(224,84,84,.08)" stroke="var(--red)" stroke-width="1.5"/>
+          <text x="20" y="26" fill="var(--red)" font-weight="700" font-size="11.5">CCA – Chosen Ciphertext</text>
+          <text x="20" y="40" fill="var(--text3)" font-size="9.5">Ver- UND Entschlüsselungsorakel; fast bel. CT</text>
 
-          <!-- CPA (middle) -->
-          <rect x="10" y="64" width="220" height="44" rx="5" fill="rgba(232,160,37,.07)" stroke="var(--accent)" stroke-width="1.5"/>
-          <text x="20" y="82" fill="var(--accent)" font-weight="700" font-size="12">CPA – Chosen Plaintext</text>
-          <text x="20" y="97" fill="var(--text3)" font-size="10">Angreifer kann beliebige P verschlüsseln lassen</text>
+          <!-- CPA -->
+          <rect x="10" y="56" width="220" height="38" rx="5" fill="rgba(232,160,37,.07)" stroke="var(--accent)" stroke-width="1.5"/>
+          <text x="20" y="72" fill="var(--accent)" font-weight="700" font-size="11.5">CPA – Chosen Plaintext</text>
+          <text x="20" y="86" fill="var(--text3)" font-size="9.5">Verschlüsselungsorakel; wählt beliebige P→C</text>
+
+          <!-- KPA (known plaintext) -->
+          <rect x="10" y="102" width="220" height="38" rx="5" fill="rgba(91,156,246,.07)" stroke="var(--blue)" stroke-width="1.5"/>
+          <text x="20" y="118" fill="var(--blue)" font-weight="700" font-size="11.5">KPA – Known Plaintext</text>
+          <text x="20" y="132" fill="var(--text3)" font-size="9.5">Kennt Liste (P,C)-Paare; z.B. bricht Caesar sofort</text>
 
           <!-- EAV (weakest) -->
-          <rect x="10" y="118" width="220" height="44" rx="5" fill="rgba(86,184,112,.07)" stroke="var(--green)" stroke-width="1.5"/>
-          <text x="20" y="136" fill="var(--green)" font-weight="700" font-size="12">EAV – Eavesdropper</text>
-          <text x="20" y="151" fill="var(--text3)" font-size="10">Angreifer hört nur ab, kann nichts wählen</text>
+          <rect x="10" y="148" width="220" height="38" rx="5" fill="rgba(86,184,112,.07)" stroke="var(--green)" stroke-width="1.5"/>
+          <text x="20" y="164" fill="var(--green)" font-weight="700" font-size="11.5">EAV – Eavesdropper</text>
+          <text x="20" y="178" fill="var(--text3)" font-size="9.5">Sieht nur Challenge-CT; reiner Lauscher</text>
 
           <!-- Bracket -->
-          <line x1="238" y1="15" x2="238" y2="155" stroke="var(--text3)" stroke-width="1"/>
-          <text x="242" y="90" fill="var(--text3)" font-size="9" transform="rotate(90,242,90)">zunehmend stärker</text>
+          <line x1="238" y1="15" x2="238" y2="180" stroke="var(--text3)" stroke-width="1"/>
+          <text x="242" y="100" fill="var(--text3)" font-size="9" transform="rotate(90,242,100)">zunehmend stärker</text>
         </svg>
       </div>
       <div class="box blue">
         <div class="lbl">Konservative Standards</div>
-        Design immer gegen <strong>CCA</strong> — das stärkste Modell. CCA-Sicherheit impliziert CPA- und EAV-Sicherheit. Padding Oracle Angriff ist ein klassisches CCA!
+        Design immer gegen <strong>CCA</strong>. CCA-Sicherheit impliziert CPA, KPA und EAV. Padding Oracle = klassischer CCA-Angriff. KPA-Beispiel: Midway-Anekdote im 2. WK.
       </div>
+      <table style="font-size:12.5px;margin-top:8px">
+        <tr><th>Modus</th><th>Sicher bis</th><th>Bricht bei</th></tr>
+        <tr><td>AES-CTR</td><td class="ck">CPA</td><td class="cx">CCA (malleable)</td></tr>
+        <tr><td>AES-CBC</td><td class="ck">CPA</td><td class="cx">CCA (Padding Oracle)</td></tr>
+        <tr><td>AES-GCM</td><td class="ck">CCA</td><td>–</td></tr>
+      </table>
     </div>
     <div>
       <h3>Authenticated Encryption</h3>
@@ -825,6 +878,41 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     </div>
   </div>
 
+  <h3>Geburtstagsparadoxon</h3>
+  <div class="g2r">
+    <div>
+      <div class="box">
+        <div class="lbl">Formel</div>
+        Bei M = 2<sup>N</sup> möglichen Werten (N-Bit-Hash) tritt eine Kollision nach etwa<br><br>
+        <code>k ≈ 1,18 · √M = 1,18 · 2<sup>N/2</sup></code><br><br>
+        Versuchen mit &gt;50% Wahrscheinlichkeit auf. Ein <strong>N-Bit-Hash bietet nur N/2 Bit Kollisionsresistenz!</strong>
+      </div>
+      <div class="box red">
+        <div class="lbl">Praxiskonsequenzen</div>
+        <strong>SHA-256 (256 Bit):</strong> Kollision nach ~2<sup>128</sup> — sicher.<br>
+        <strong>64-Bit-Nonces:</strong> Wiederholen sich nach ~2<sup>32</sup> ≈ 4 Mrd. — bei schnellen Systemen erreichbar!<br>
+        <strong>MD5 (128 Bit):</strong> Kollision nach ~2<sup>64</sup> — 2004 praktisch gebrochen.
+      </div>
+    </div>
+    <div class="tool" id="tool-birthday" style="margin:0">
+      <div class="tool-title">Geburtstagsparadoxon Rechner</div>
+      <div class="tg" style="margin-bottom:10px"><label>Hash / Tag Länge (Bit)</label>
+        <select id="bd-n" onchange="bdCalc()">
+          <option value="32">32 Bit (z.B. CRC)</option>
+          <option value="64">64 Bit (Hälfte MD5)</option>
+          <option value="128" selected>128 Bit (GCM-Tag, MD5)</option>
+          <option value="160">160 Bit (SHA-1)</option>
+          <option value="256">256 Bit (SHA-256)</option>
+        </select>
+      </div>
+      <div id="bd-out"></div>
+      <div class="box" style="margin-top:8px;font-size:12.5px">
+        <div class="lbl">23-Personen-Analogie</div>
+        In einem Raum mit <strong>23 Personen</strong> teilen zwei mit &gt;50% denselben Geburtstag — obwohl es 365 mögliche Tage gibt. √365 ≈ 19.
+      </div>
+    </div>
+  </div>
+
   <h3>Passwort-Hashing &amp; KDFs</h3>
   <div class="g2">
     <div class="box red">
@@ -838,20 +926,28 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
   </div>
 
   <div class="viz">
-    <svg viewBox="0 0 580 80" style="width:100%;height:auto" font-family="var(--sans)" font-size="11">
-      <text x="10" y="16" fill="var(--text3)" font-size="10" font-weight="700">Argon2 Parameter-Einfluss auf Laufzeit</text>
-      <!-- Memory bar -->
-      <text x="10" y="36" fill="var(--text2)">Memory (m)</text>
-      <rect x="90" y="26" width="30" height="12" rx="2" fill="var(--green)"/><text x="124" y="37" fill="var(--text3)" font-size="9.5">4 MB — schnell</text>
-      <rect x="90" y="26" width="120" height="12" rx="2" fill="var(--accent)" x="200"/><text x="224" y="37" fill="var(--text3)" font-size="9.5">32 MB — mittel</text>
-      <rect x="90" y="26" width="190" height="12" rx="2" fill="var(--red)" x="330"/><text x="354" y="37" fill="var(--text3)" font-size="9.5">64 MB — langsam (gewünscht!)</text>
-      <!-- Iterations -->
-      <text x="10" y="60" fill="var(--text2)">Iterations (i)</text>
-      <rect x="90" y="50" width="50" height="12" rx="2" fill="var(--green)"/><text x="144" y="61" fill="var(--text3)" font-size="9.5">i=3</text>
-      <rect x="200" y="50" width="110" height="12" rx="2" fill="var(--accent)"/><text x="314" y="61" fill="var(--text3)" font-size="9.5">i=10 (+Zeit)</text>
+    <svg viewBox="0 0 560 145" style="width:100%;height:auto" font-family="var(--sans)" font-size="10">
+      <text x="10" y="14" fill="var(--text3)" font-size="9.5" font-weight="700">Argon2 Parameter-Einfluss auf Laufzeit (Balken = relative Größe)</text>
+      <!-- Memory section -->
+      <text x="10" y="34" fill="var(--text2)" font-size="10">Speicher m:</text>
+      <rect x="100" y="22" width="28" height="13" rx="2" fill="var(--green)"/>
+      <text x="131" y="32" fill="var(--text3)" font-size="9">4 MB — schnell</text>
+      <rect x="100" y="39" width="112" height="13" rx="2" fill="var(--accent)"/>
+      <text x="215" y="50" fill="var(--text3)" font-size="9">32 MB — mittel</text>
+      <rect x="100" y="56" width="224" height="13" rx="2" fill="var(--red)"/>
+      <text x="327" y="67" fill="var(--text3)" font-size="9">64 MB — langsam (memory-hard, GPU-resistent!)</text>
+      <!-- Divider -->
+      <line x1="10" y1="80" x2="550" y2="80" stroke="var(--border)" stroke-width="0.6"/>
+      <!-- Iterations section -->
+      <text x="10" y="100" fill="var(--text2)" font-size="10">Iterationen i:</text>
+      <rect x="100" y="88" width="50" height="13" rx="2" fill="var(--green)"/>
+      <text x="153" y="99" fill="var(--text3)" font-size="9">i=3 — Basis</text>
+      <rect x="100" y="105" width="140" height="13" rx="2" fill="var(--accent)"/>
+      <text x="243" y="116" fill="var(--text3)" font-size="9">i=10 — ~3× langsamer</text>
+      <!-- Divider -->
+      <line x1="10" y1="128" x2="550" y2="128" stroke="var(--border)" stroke-width="0.6"/>
       <!-- Parallelism -->
-      <text x="380" y="60" fill="var(--text2)">Parallelism (p)</text>
-      <text x="490" y="61" fill="var(--teal)" font-size="10">p↑ → schneller (mehr Kerne)</text>
+      <text x="10" y="142" fill="var(--teal)" font-size="9.5">Parallelismus p↑ → schneller (mehr CPU-Kerne nutzen, keine Sicherheitsänderung)</text>
     </svg>
   </div>
 
@@ -959,35 +1055,61 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     </div>
     <div>
       <div class="viz">
-        <svg viewBox="0 0 220 200" style="width:100%;height:auto" font-family="var(--sans)" font-size="11">
-          <text x="110" y="14" text-anchor="middle" fill="var(--text3)" font-size="10" font-weight="700">Asymm. Verschlüsselung</text>
-          <!-- Alice -->
-          <rect x="10" y="25" width="70" height="36" rx="5" fill="var(--bg4)" stroke="var(--teal)" stroke-width="1.3"/>
-          <text x="45" y="40" text-anchor="middle" fill="var(--teal)" font-weight="700">Alice</text>
-          <text x="45" y="55" text-anchor="middle" fill="var(--text3)" font-size="9.5">K_pub, K_priv</text>
-          <!-- Cloud -->
-          <ellipse cx="110" cy="40" rx="40" ry="15" fill="var(--bg3)" stroke="var(--border)" stroke-dasharray="3,2"/>
-          <text x="110" y="44" text-anchor="middle" fill="var(--text3)" font-size="9">K_pub</text>
-          <!-- Bob -->
-          <rect x="140" y="25" width="70" height="36" rx="5" fill="var(--bg4)" stroke="var(--blue)" stroke-width="1.3"/>
-          <text x="175" y="40" text-anchor="middle" fill="var(--blue)" font-weight="700">Bob</text>
-          <text x="175" y="55" text-anchor="middle" fill="var(--text3)" font-size="9.5">erhält K_pub</text>
-          <!-- Arrows top -->
-          <line x1="80" y1="34" x2="70" y2="34" stroke="var(--border)" stroke-dasharray="3,2"/>
-          <line x1="150" y1="34" x2="140" y2="34" stroke="var(--border)" stroke-dasharray="3,2"/>
-          <!-- Message -->
-          <line x1="140" y1="72" x2="80" y2="72" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#mka)"/>
-          <text x="110" y="67" text-anchor="middle" fill="var(--blue)" font-size="9.5">E(K_pub, P) → C</text>
-          <!-- Decrypt -->
-          <text x="110" y="88" text-anchor="middle" fill="var(--text3)" font-size="9">Alice entschlüsselt mit K_priv:</text>
-          <text x="110" y="101" text-anchor="middle" fill="var(--teal)" font-size="9.5">D(K_priv, C) = P</text>
-          <!-- Signature flip -->
-          <line x1="0" y1="115" x2="220" y2="115" stroke="var(--border)" stroke-width="1" stroke-dasharray="8,4"/>
-          <text x="110" y="128" text-anchor="middle" fill="var(--text3)" font-size="10" font-weight="700">Digitale Signatur (umgekehrt)</text>
-          <text x="110" y="145" text-anchor="middle" fill="var(--purple)" font-size="9.5">Sign: H(m)<sup>d</sup> mod N (K_priv)</text>
-          <text x="110" y="161" text-anchor="middle" fill="var(--green)" font-size="9.5">Verify: S<sup>e</sup> mod N =? H(m)</text>
-          <text x="110" y="180" text-anchor="middle" fill="var(--text3)" font-size="9">Jeder kann verifizieren — nur Alice kann signieren</text>
-          <defs><marker id="mka" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--blue)"/></marker></defs>
+        <svg viewBox="0 0 300 200" style="width:100%;height:auto" font-family="var(--sans)" font-size="10">
+          <defs>
+            <marker id="mka" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--blue)"/></marker>
+            <marker id="mka-brd" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--border)"/></marker>
+            <marker id="mka-pur" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--purple)"/></marker>
+          </defs>
+
+          <!-- ── VERSCHLÜSSELUNG ── -->
+          <!-- K_pub cloud: sitzt IM GAP zwischen Alice und Bob (x=110–190) -->
+          <ellipse cx="150" cy="25" rx="42" ry="13" fill="var(--bg3)" stroke="var(--border)" stroke-dasharray="3,2"/>
+          <text x="150" y="22" text-anchor="middle" fill="var(--text3)" font-size="8.5" font-weight="700">K_pub</text>
+          <text x="150" y="32" text-anchor="middle" fill="var(--text3)" font-size="7.5">(öffentlich bekannt)</text>
+
+          <!-- Pfeile: Cloud → Alice und Cloud → Bob -->
+          <line x1="111" y1="36" x2="74" y2="50" stroke="var(--border)" stroke-width="1" stroke-dasharray="2,2" marker-end="url(#mka-brd)"/>
+          <line x1="189" y1="36" x2="226" y2="50" stroke="var(--border)" stroke-width="1" stroke-dasharray="2,2" marker-end="url(#mka-brd)"/>
+
+          <!-- Alice-Box -->
+          <rect x="10" y="52" width="100" height="36" rx="5" fill="var(--bg4)" stroke="var(--teal)" stroke-width="1.3"/>
+          <text x="60" y="67" text-anchor="middle" fill="var(--teal)" font-weight="700" font-size="11">Alice</text>
+          <text x="60" y="81" text-anchor="middle" fill="var(--text3)" font-size="8.5">K_pub + K_priv</text>
+
+          <!-- Bob-Box -->
+          <rect x="190" y="52" width="100" height="36" rx="5" fill="var(--bg4)" stroke="var(--blue)" stroke-width="1.3"/>
+          <text x="240" y="67" text-anchor="middle" fill="var(--blue)" font-weight="700" font-size="11">Bob</text>
+          <text x="240" y="81" text-anchor="middle" fill="var(--text3)" font-size="8.5">hat K_pub</text>
+
+          <!-- Verschlüsselung: Bob → Alice (im Gap, horizontal) -->
+          <text x="150" y="67" text-anchor="middle" fill="var(--blue)" font-size="8.5">C = E(K_pub, P)</text>
+          <line x1="188" y1="72" x2="112" y2="72" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#mka)"/>
+
+          <!-- Entschlüsselung (unter Alice-Box) -->
+          <text x="60" y="99" text-anchor="middle" fill="var(--teal)" font-size="8">D(K_priv, C) = P ✓</text>
+
+          <!-- ── TRENNLINIE ── -->
+          <line x1="5" y1="110" x2="295" y2="110" stroke="var(--border)" stroke-width="1" stroke-dasharray="8,4"/>
+          <text x="150" y="122" text-anchor="middle" fill="var(--text3)" font-size="9.5" font-weight="700">Digitale Signatur (umgekehrt)</text>
+
+          <!-- ── SIGNATUR ── -->
+          <!-- Alice signiert (links) -->
+          <rect x="10" y="130" width="100" height="42" rx="4" fill="rgba(176,136,249,.1)" stroke="var(--purple)"/>
+          <text x="60" y="147" text-anchor="middle" fill="var(--purple)" font-weight="700" font-size="9.5">Alice signiert</text>
+          <text x="60" y="163" text-anchor="middle" fill="var(--purple)" font-size="8">S = H(m)^d mod N</text>
+
+          <!-- Pfeil: Alice → Bob (im Gap, horizontal) -->
+          <text x="150" y="146" text-anchor="middle" fill="var(--purple)" font-size="8">m, S</text>
+          <line x1="112" y1="151" x2="188" y2="151" stroke="var(--purple)" stroke-width="1.5" marker-end="url(#mka-pur)"/>
+
+          <!-- Bob verifiziert (rechts) -->
+          <rect x="190" y="130" width="100" height="42" rx="4" fill="rgba(86,184,112,.1)" stroke="var(--green)"/>
+          <text x="240" y="147" text-anchor="middle" fill="var(--green)" font-weight="700" font-size="9.5">Bob verifiziert</text>
+          <text x="240" y="163" text-anchor="middle" fill="var(--green)" font-size="8">S^e mod N =? H(m)</text>
+
+          <!-- Footer -->
+          <text x="150" y="190" text-anchor="middle" fill="var(--text3)" font-size="8.5">Jeder kann mit K_pub verifizieren — nur Alice signiert mit K_priv</text>
         </svg>
       </div>
     </div>
@@ -1021,6 +1143,19 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     </div>
   </div>
 </section>
+
+  <!-- RSA Rechner -->
+  <div class="tool" id="tool-rsa" style="margin-top:16px">
+    <div class="tool-title">RSA Rechner (kleine Primzahlen)</div>
+    <div class="tool-row">
+      <div class="tg" style="max-width:90px"><label>p (prim)</label><input type="number" id="rp" value="11" min="2" max="997" oninput="rsaCalc()"></div>
+      <div class="tg" style="max-width:90px"><label>q (prim)</label><input type="number" id="rq" value="17" min="2" max="997" oninput="rsaCalc()"></div>
+      <div class="tg" style="max-width:90px"><label>e</label><input type="number" id="re" value="7" min="2" oninput="rsaCalc()"></div>
+      <div class="tg" style="max-width:90px"><label>Nachricht m</label><input type="number" id="rm" value="42" min="0" oninput="rsaCalc()"></div>
+      <button onclick="rsaCalc()">Berechnen</button>
+    </div>
+    <div id="rsa-out"></div>
+  </div>
 
 <!-- ═══ V8 ═══ -->
 <section class="sec" id="v8">
@@ -1155,13 +1290,482 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
   </div>
 </section>
 
+<!-- ═══ V9 ═══ -->
+<section class="sec" id="v9">
+  <div class="sec-hd">
+    <span class="sec-num">09</span>
+    <div>
+      <div class="sec-title">Netzwerksicherheit</div>
+      <div class="sec-sub">OSI-Stack · Angriffe · Replay · Sequenzdiagramme</div>
+    </div>
+  </div>
+
+  <h3>OSI-Schichtenmodell</h3>
+  <div class="viz">
+    <svg viewBox="0 0 580 200" style="width:100%;height:auto" font-family="var(--sans)" font-size="11">
+      <defs><marker id="osi-arr" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--text3)"/></marker></defs>
+      <!-- Layer boxes -->
+      <rect x="10" y="8" width="320" height="24" rx="4" fill="rgba(176,136,249,.12)" stroke="var(--purple)"/>
+      <text x="20" y="24" fill="var(--purple)" font-weight="700">7 Application</text>
+      <text x="140" y="24" fill="var(--text3)" font-size="10">HTTP, XMPP, MQTT, DNS</text>
+      <text x="370" y="24" fill="var(--text3)" font-size="10">← TLS sitzt hier (Application/Transport)</text>
+
+      <rect x="10" y="36" width="320" height="24" rx="4" fill="rgba(176,136,249,.08)" stroke="var(--border)"/>
+      <text x="20" y="52" fill="var(--text2)" font-weight="700">6 Presentation</text>
+
+      <rect x="10" y="64" width="320" height="24" rx="4" fill="rgba(176,136,249,.08)" stroke="var(--border)"/>
+      <text x="20" y="80" fill="var(--text2)" font-weight="700">5 Session</text>
+
+      <rect x="10" y="92" width="320" height="24" rx="4" fill="rgba(91,156,246,.12)" stroke="var(--blue)"/>
+      <text x="20" y="108" fill="var(--blue)" font-weight="700">4 Transport</text>
+      <text x="140" y="108" fill="var(--text3)" font-size="10">TCP, UDP</text>
+      <text x="370" y="108" fill="var(--text3)" font-size="10">← TLS schützt Transport</text>
+
+      <rect x="10" y="120" width="320" height="24" rx="4" fill="rgba(78,205,196,.12)" stroke="var(--teal)"/>
+      <text x="20" y="136" fill="var(--teal)" font-weight="700">3 Network</text>
+      <text x="140" y="136" fill="var(--text3)" font-size="10">IP, IPSec, ICMP, IGMP</text>
+
+      <rect x="10" y="148" width="320" height="24" rx="4" fill="rgba(78,205,196,.08)" stroke="var(--border)"/>
+      <text x="20" y="164" fill="var(--text2)" font-weight="700">2 Link</text>
+      <text x="140" y="164" fill="var(--text3)" font-size="10">Ethernet, WLAN (IEEE 802.11)</text>
+
+      <rect x="10" y="176" width="320" height="24" rx="4" fill="rgba(86,184,112,.08)" stroke="var(--border)"/>
+      <text x="20" y="192" fill="var(--text2)" font-weight="700">1 Physical</text>
+      <text x="140" y="192" fill="var(--text3)" font-size="10">Kupfer, Glasfaser, Funk</text>
+
+      <!-- Angreifer-Box -->
+      <rect x="360" y="36" width="210" height="130" rx="5" fill="rgba(224,84,84,.06)" stroke="var(--red)" stroke-dasharray="5,3"/>
+      <text x="465" y="58" text-anchor="middle" fill="var(--red)" font-weight="700" font-size="10.5">Angreifer-Modell bei TLS</text>
+      <text x="370" y="76" fill="var(--text3)" font-size="9.5">✓ Kontrolliert alle Router</text>
+      <text x="370" y="92" fill="var(--text3)" font-size="9.5">✓ Kann Pakete einschleusen</text>
+      <text x="370" y="108" fill="var(--text3)" font-size="9.5">✓ Sieht alle CT im Netz</text>
+      <text x="370" y="124" fill="var(--red)" font-size="9.5">✗ Kontrolliert Endgeräte nicht</text>
+      <text x="370" y="140" fill="var(--red)" font-size="9.5">✗ Kennt private Schlüssel nicht</text>
+      <text x="370" y="156" fill="var(--green)" font-size="9.5">→ TLS muss trotzdem halten!</text>
+    </svg>
+  </div>
+
+  <h3>Netzwerkangriffe im Überblick</h3>
+  <table>
+    <tr><th>Angriff</th><th>Beschreibung</th><th>Schutzziel</th><th>Gegenmaßnahme</th></tr>
+    <tr><td><strong style="color:var(--red)">Spoofing</strong></td><td>Falsche Identität vortäuschen</td><td class="cx">Authentizität</td><td>Signaturen, Zertifikate</td></tr>
+    <tr><td><strong style="color:var(--red)">DoS</strong></td><td>Dienst durch Überlastung lahmlegen</td><td class="cx">Verfügbarkeit</td><td>Rate Limiting, Filtering</td></tr>
+    <tr><td><strong style="color:var(--accent)">Reflection</strong></td><td>Antworten verstärkt ans Opfer lenken</td><td class="cx">Verfügbarkeit</td><td>Ingress-Filtering (BCP38)</td></tr>
+    <tr><td><strong style="color:var(--accent)">MITM</strong></td><td>Zwischen Parteien sitzen, mitlesen/ändern</td><td class="cx">Vertraulichkeit</td><td>Auth. Schlüsselaustausch (DH+Sig)</td></tr>
+    <tr><td><strong style="color:var(--accent)">Replay</strong></td><td>Gültige aufgezeichnete Nachricht erneut einspielen</td><td class="cx">Integrität</td><td>Nonce / Timestamp / Sequenzzähler</td></tr>
+  </table>
+
+  <h3>Replay-Angriff — Sequenzdiagramm</h3>
+  <div class="g2">
+    <div class="viz">
+      <svg viewBox="0 0 260 200" style="width:100%;height:auto" font-family="var(--sans)" font-size="10">
+        <defs>
+          <marker id="rp-arr" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--blue)"/></marker>
+          <marker id="rp-arr-r" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--red)"/></marker>
+        </defs>
+        <text x="50" y="14" text-anchor="middle" fill="var(--teal)" font-weight="700">Alice</text>
+        <text x="210" y="14" text-anchor="middle" fill="var(--blue)" font-weight="700">Bob</text>
+        <line x1="50" y1="18" x2="50" y2="195" stroke="var(--text3)" stroke-width="1"/>
+        <line x1="210" y1="18" x2="210" y2="195" stroke="var(--text3)" stroke-width="1"/>
+
+        <!-- Legitimate message -->
+        <line x1="54" y1="40" x2="204" y2="40" stroke="var(--blue)" stroke-width="1.3" marker-end="url(#rp-arr)"/>
+        <text x="130" y="35" text-anchor="middle" fill="var(--blue)" font-size="9">„Überweisung 100€" + MAC</text>
+        <line x1="210" y1="58" x2="56" y2="58" stroke="var(--blue)" stroke-width="1.3" marker-end="url(#rp-arr-r)"/>
+        <text x="130" y="53" text-anchor="middle" fill="var(--blue)" font-size="9">„OK"</text>
+
+        <!-- Eve intercepts -->
+        <rect x="90" y="68" width="80" height="18" rx="3" fill="rgba(224,84,84,.15)" stroke="var(--red)"/>
+        <text x="130" y="81" text-anchor="middle" fill="var(--red)" font-size="9">Eve speichert CT!</text>
+
+        <!-- Replay -->
+        <text x="130" y="105" text-anchor="middle" fill="var(--text3)" font-size="8.5">— später —</text>
+        <line x1="54" y1="118" x2="204" y2="118" stroke="var(--red)" stroke-width="1.5" marker-end="url(#rp-arr)" stroke-dasharray="4,2"/>
+        <text x="130" y="113" text-anchor="middle" fill="var(--red)" font-size="9">gleicher CT erneut!</text>
+        <line x1="210" y1="136" x2="56" y2="136" stroke="var(--red)" stroke-width="1.3" marker-end="url(#rp-arr-r)"/>
+        <text x="130" y="131" text-anchor="middle" fill="var(--red)" font-size="9">„OK" — 2. Überweisung!</text>
+
+        <rect x="20" y="150" width="220" height="36" rx="4" fill="rgba(86,184,112,.07)" stroke="var(--green)"/>
+        <text x="130" y="164" text-anchor="middle" fill="var(--green)" font-weight="700" font-size="9.5">Gegenmaßnahme</text>
+        <text x="130" y="179" text-anchor="middle" fill="var(--text3)" font-size="9">Nonce / Sequenznummer / Timestamp</text>
+      </svg>
+    </div>
+    <div>
+      <div class="box">
+        <div class="lbl">Was ist ein Replay-Angriff?</div>
+        Ein Angreifer zeichnet eine gültige, authentifizierte Nachricht auf und spielt sie später <em>unverändert</em> erneut ein. Der MAC/Auth-Tag ist korrekt — trotzdem bricht das Protokoll.
+      </div>
+      <div class="box green">
+        <div class="lbl">Gegenmaßnahmen</div>
+        <strong>Nonce:</strong> Zufallszahl pro Nachricht — Server prüft, dass er sie noch nie gesehen hat.<br><br>
+        <strong>Timestamp:</strong> Nachricht akzeptiert nur, wenn nicht älter als X Sekunden.<br><br>
+        <strong>Sequenzzähler:</strong> Monoton steigender Zähler; ältere Werte werden abgelehnt.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ V10 ═══ -->
+<section class="sec" id="v10">
+  <div class="sec-hd">
+    <span class="sec-num">10</span>
+    <div>
+      <div class="sec-title">TLS &amp; Downgrade-Angriffe</div>
+      <div class="sec-sub">Was ist TLS · Ciphersuites · Handshake · PFS · POODLE/FREAK</div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="box teal">
+      <div class="lbl">Was ist TLS?</div>
+      <strong>Transport Layer Security</strong> — sichert die Verbindung auf dem Transportlayer (über IP).<br><br>
+      Schützt gegen: <strong>Modifikation</strong> (Integrität) und <strong>Lauschangriffe</strong> (Vertraulichkeit).<br>
+      Bietet zudem <strong>Authentifizierung</strong> der Gegenstelle via Zertifikate.<br><br>
+      TLS basiert auf <em>Sessions</em>: explizit aufgebaut und abgebaut.
+    </div>
+    <div class="box red">
+      <div class="lbl">Downgrade-Angriff</div>
+      Viele Protokolle unterstützen mehrere Versionen zur Rückwärtskompatibilität. Ein <strong>Downgrade-Angriff</strong> überredet die Gegenstelle, eine alte, verwundbare Version zu nutzen.<br><br>
+      <strong>POODLE</strong> (2014): SSL 3.0 Fallback → CBC Padding Oracle.<br>
+      <strong>FREAK</strong>: Export-RSA-Keys (512 Bit) erzwingen.<br>
+      <strong>SMACK</strong>: Zustandsmaschinen-Angriffe auf TLS.
+    </div>
+  </div>
+
+  <h3>TLS 1.2 vs. TLS 1.3: Ciphersuite-Format</h3>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="tab('tls','13',this)">TLS 1.3</button>
+    <button class="tab-btn" onclick="tab('tls','12',this)">TLS 1.2</button>
+  </div>
+  <div id="tls-13" class="tab-panel active">
+    <div class="g2r">
+      <div>
+        <h4>Format: TLS_&lt;AEAD&gt;_&lt;HASH&gt;</h4>
+        <p style="font-size:13.5px">In TLS 1.3 ist der Schlüsselaustausch <strong>immer ECDHE</strong> — er steht nicht mehr im Namen. Das Ciphersuite-Format ist stark vereinfacht.</p>
+        <table style="font-size:12.5px">
+          <tr><th>Ciphersuite</th><th>AEAD</th><th>Hash</th></tr>
+          <tr><td><code>TLS_AES_128_GCM_SHA256</code></td><td>AES-128-GCM</td><td>SHA-256</td></tr>
+          <tr><td><code>TLS_AES_256_GCM_SHA384</code></td><td>AES-256-GCM</td><td>SHA-384</td></tr>
+          <tr><td><code>TLS_CHACHA20_POLY1305_SHA256</code></td><td>ChaCha20+Poly1305</td><td>SHA-256</td></tr>
+        </table>
+        <div class="box green">
+          <div class="lbl">Wichtige Eigenschaften TLS 1.3</div>
+          Nur noch sichere Algorithmen erlaubt. Kein RSA-Schlüsselaustausch (nur ECDHE). <strong>1-RTT Handshake</strong>. Veraltete Cipher (RC4, 3DES, CBC) entfernt. PFS immer erzwungen.
+        </div>
+      </div>
+      <div class="viz">
+        <svg viewBox="0 0 220 130" style="width:100%;height:auto" font-family="var(--mono)" font-size="10">
+          <text x="110" y="14" text-anchor="middle" fill="var(--text3)" font-family="var(--sans)" font-size="9" font-weight="700">TLS 1.3 Ciphersuite Aufbau</text>
+          <rect x="10" y="22" width="30" height="22" rx="3" fill="rgba(78,205,196,.15)" stroke="var(--teal)"/>
+          <text x="25" y="35" text-anchor="middle" fill="var(--teal)" font-size="8.5">TLS</text>
+          <rect x="44" y="22" width="60" height="22" rx="3" fill="rgba(232,160,37,.15)" stroke="var(--accent)"/>
+          <text x="74" y="35" text-anchor="middle" fill="var(--accent)" font-size="8.5">AEAD Cipher</text>
+          <rect x="108" y="22" width="50" height="22" rx="3" fill="rgba(91,156,246,.15)" stroke="var(--blue)"/>
+          <text x="133" y="35" text-anchor="middle" fill="var(--blue)" font-size="8.5">Hash</text>
+          <text x="25" y="60" text-anchor="middle" fill="var(--teal)" font-size="8">TLS_</text>
+          <text x="74" y="60" text-anchor="middle" fill="var(--accent)" font-size="8">AES_256_GCM_</text>
+          <text x="133" y="60" text-anchor="middle" fill="var(--blue)" font-size="8">SHA384</text>
+          <rect x="10" y="70" width="40" height="16" rx="2" fill="rgba(176,136,249,.1)" stroke="var(--purple)"/>
+          <text x="30" y="81" text-anchor="middle" fill="var(--purple)" font-size="8">KX: immer</text>
+          <text x="30" y="91" text-anchor="middle" fill="var(--purple)" font-size="8">ECDHE!</text>
+          <text x="30" y="105" text-anchor="middle" fill="var(--text3)" font-size="8">(kein Name)</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div id="tls-12" class="tab-panel">
+    <h4>Format: &lt;KX&gt;-&lt;Auth&gt;-&lt;Cipher&gt;-&lt;MAC&gt;</h4>
+    <div class="g2r">
+      <div>
+        <p style="font-size:13.5px">TLS 1.2 Ciphersuiten nennen explizit alle Komponenten im Namen.</p>
+        <table style="font-size:12.5px">
+          <tr><th>Ciphersuite</th><th>KX</th><th>Auth</th><th>Cipher</th><th>MAC</th></tr>
+          <tr><td><code style="font-size:10.5px">ECDHE-RSA-AES128-SHA256</code></td><td>ECDHE</td><td>RSA</td><td>AES-128-CBC</td><td>SHA-256</td></tr>
+          <tr><td><code style="font-size:10.5px">ECDHE-ECDSA-AES256-GCM-SHA384</code></td><td>ECDHE</td><td>ECDSA</td><td>AES-256-GCM</td><td>SHA-384</td></tr>
+          <tr><td><code style="font-size:10.5px">DHE-RSA-AES256-SHA256</code></td><td>DHE</td><td>RSA</td><td>AES-256-CBC</td><td>SHA-256</td></tr>
+        </table>
+        <div class="box">
+          <div class="lbl">Session Tickets (TLS 1.2)</div>
+          Ticket reist im <strong>Client Hello</strong> (Extension <code>session_ticket</code>).<br>
+          Akzeptiert: Server antwortet mit <em>Server Hello → Change Cipher Spec → Finished</em> ohne neues Zertifikat (abgekürzter Handshake).
+        </div>
+      </div>
+      <div>
+        <div class="box red">
+          <div class="lbl">Schwächen TLS 1.2</div>
+          CBC-Ciphersuiten → Padding Oracle möglich (POODLE).<br>
+          RSA-Key-Exchange (kein DH): kein PFS!<br>
+          Viele optionale, unsichere Cipher erlaubt.<br>
+          Manche Implementierungen akzeptieren Export-Keys (FREAK).
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>TLS-Handshake (TLS 1.3, vereinfacht)</h3>
+  <div class="viz">
+    <svg viewBox="0 0 560 240" style="width:100%;height:auto" font-family="var(--sans)" font-size="10">
+      <defs>
+        <marker id="hs-r" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--blue)"/></marker>
+        <marker id="hs-l" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--teal)"/></marker>
+        <marker id="hs-g" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--green)"/></marker>
+      </defs>
+      <!-- Entities -->
+      <rect x="20" y="8" width="100" height="24" rx="4" fill="var(--bg4)" stroke="var(--teal)"/>
+      <text x="70" y="24" text-anchor="middle" fill="var(--teal)" font-weight="700">Client</text>
+      <rect x="440" y="8" width="100" height="24" rx="4" fill="var(--bg4)" stroke="var(--blue)"/>
+      <text x="490" y="24" text-anchor="middle" fill="var(--blue)" font-weight="700">Server</text>
+      <line x1="70" y1="32" x2="70" y2="235" stroke="var(--text3)" stroke-width="1" stroke-dasharray="3,3"/>
+      <line x1="490" y1="32" x2="490" y2="235" stroke="var(--text3)" stroke-width="1" stroke-dasharray="3,3"/>
+
+      <!-- Step 1: Client Hello -->
+      <line x1="74" y1="55" x2="484" y2="55" stroke="var(--teal)" stroke-width="1.5" marker-end="url(#hs-r)"/>
+      <text x="280" y="50" text-anchor="middle" fill="var(--teal)">Client Hello (key_share, ciphersuites)</text>
+
+      <!-- Step 2: Server Hello -->
+      <line x1="486" y1="80" x2="76" y2="80" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#hs-l)"/>
+      <text x="280" y="75" text-anchor="middle" fill="var(--blue)">Server Hello (key_share) → beide leiten Sitzungsschlüssel ab</text>
+
+      <!-- Key derivation note -->
+      <rect x="180" y="86" width="200" height="16" rx="3" fill="rgba(86,184,112,.1)" stroke="var(--green)"/>
+      <text x="280" y="97" text-anchor="middle" fill="var(--green)" font-size="9">ECDHE: K = g^(ab) mod p — ab jetzt verschlüsselt</text>
+
+      <!-- Step 3: Encrypted Extensions + Certificate + CertVerify + Finished -->
+      <line x1="486" y1="120" x2="76" y2="120" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#hs-l)"/>
+      <text x="280" y="115" text-anchor="middle" fill="var(--blue)">{EncryptedExtensions} + {Certificate}</text>
+
+      <line x1="486" y1="145" x2="76" y2="145" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#hs-l)"/>
+      <text x="280" y="140" text-anchor="middle" fill="var(--blue)">{CertificateVerify} ← signiert Handshake-Transcript</text>
+      <text x="280" y="157" text-anchor="middle" fill="var(--text3)" font-size="9">verhindert Downgrade + bindet Zertifikat an DH-Schlüssel</text>
+
+      <line x1="486" y1="170" x2="76" y2="170" stroke="var(--blue)" stroke-width="1.5" marker-end="url(#hs-l)"/>
+      <text x="280" y="165" text-anchor="middle" fill="var(--blue)">{Finished}</text>
+
+      <!-- Step 7: Client Finished -->
+      <line x1="74" y1="190" x2="484" y2="190" stroke="var(--green)" stroke-width="1.5" marker-end="url(#hs-g)"/>
+      <text x="280" y="185" text-anchor="middle" fill="var(--green)">{Finished}</text>
+
+      <!-- Application Data -->
+      <line x1="74" y1="215" x2="484" y2="215" stroke="var(--accent)" stroke-width="1.8" marker-end="url(#hs-g)"/>
+      <line x1="486" y1="230" x2="76" y2="230" stroke="var(--accent)" stroke-width="1.8" marker-end="url(#hs-l)"/>
+      <text x="280" y="210" text-anchor="middle" fill="var(--accent)">Application Data ↔ (AEAD verschlüsselt)</text>
+    </svg>
+  </div>
+
+  <h3>Perfect Forward Secrecy (PFS)</h3>
+  <div class="g2">
+    <div class="box green">
+      <div class="lbl">Wie PFS funktioniert</div>
+      <strong>Ephemere DH-Werte</strong> (a, b) werden nach jeder Session sicher gelöscht. Sie fließen nicht in den Langzeitschlüssel ein. <strong>ECDHE / DHE</strong> = „ephemeral" Varianten.<br><br>
+      Selbst wenn der <em>private Serverschlüssel später gestohlen wird</em>, bleiben alle aufgezeichneten Sessions geheim — der Angreifer kann nachträgliche Entschlüsselung nicht durchführen.
+    </div>
+    <div class="box red">
+      <div class="lbl">Ohne PFS (z.B. RSA-KX in TLS 1.2)</div>
+      Session-Key wird mit dem <em>langlebigen</em> RSA-Schlüssel gesichert. Wer diesen Schlüssel später stiehlt, kann alle aufgezeichneten Sessions entschlüsseln.<br><br>
+      <strong>„Harvest now, decrypt later"</strong> — staatliche Angreifer können jetzt Traffic aufzeichnen und später entschlüsseln.
+    </div>
+  </div>
+
+  <h3>TLS Ciphersuite Decoder</h3>
+  <div class="tool" id="tool-tls">
+    <div class="tool-title">TLS Ciphersuite Decoder</div>
+    <div class="tool-row">
+      <div class="tg"><label>Ciphersuite eingeben</label>
+        <input type="text" id="tls-in" value="TLS_AES_256_GCM_SHA384" oninput="tlsDecode()" placeholder="z.B. TLS_AES_256_GCM_SHA384 oder ECDHE-RSA-AES128-SHA256">
+      </div>
+      <button onclick="tlsDecode()">Analyse</button>
+    </div>
+    <div id="tls-out" style="margin-top:8px"></div>
+  </div>
+</section>
+
+<!-- ═══ V11 ═══ -->
+<section class="sec" id="v11">
+  <div class="sec-hd">
+    <span class="sec-num">11</span>
+    <div>
+      <div class="sec-title">PKI, Kerberos &amp; Authentifizierung</div>
+      <div class="sec-sub">X.509 · Zertifikatsketten · Kerberos · Passwörter · 2FA</div>
+    </div>
+  </div>
+
+  <h3>X.509-Zertifikate</h3>
+  <div class="g2r">
+    <div>
+      <div class="box">
+        <div class="lbl">Wichtige Felder eines Zertifikats</div>
+        <table style="font-size:12.5px;margin:4px 0">
+          <tr><th>Feld</th><th>Bedeutung</th></tr>
+          <tr><td><strong>Subject</strong></td><td>Wem gehört der Public Key (z.B. server.example.com)</td></tr>
+          <tr><td><strong>Issuer</strong></td><td>Wer hat das Zertifikat signiert</td></tr>
+          <tr><td><strong>Public Key</strong></td><td>Der öffentliche Schlüssel des Subjects</td></tr>
+          <tr><td><strong>Valid From/Until</strong></td><td>Gültigkeitszeitraum</td></tr>
+          <tr><td><strong>CA=true/false</strong></td><td>Darf dieses Zert. andere Zerts. signieren?</td></tr>
+          <tr><td><strong>pathlen</strong></td><td>Max. Anzahl untergeordneter CAs</td></tr>
+          <tr><td><strong>Signatur</strong></td><td>Signatur des Issuers (mit dessen K_priv)</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="box teal">
+        <div class="lbl">Zertifikat verifizieren</div>
+        1. Signatur prüfen: Issuer-Public-Key + Signatur<br>
+        2. Zeitraum: Valid From ≤ heute ≤ Valid Until<br>
+        3. CA-Flag: muss <code>CA=true</code> haben (außer Blatt)<br>
+        4. pathlen: nicht überschritten<br>
+        5. Namensverkettung: <em>Issuer[i] = Subject[i+1]</em><br>
+        6. Root: muss im Trust Store des Clients liegen
+      </div>
+    </div>
+  </div>
+
+  <h3>Zertifikatskette (Certificate Chain)</h3>
+  <div class="viz">
+    <svg viewBox="0 0 580 110" style="width:100%;height:auto" font-family="var(--sans)" font-size="10">
+      <defs><marker id="ch-arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--accent)"/></marker></defs>
+
+      <!-- Root CA -->
+      <rect x="10" y="20" width="155" height="70" rx="5" fill="rgba(232,160,37,.08)" stroke="var(--accent)" stroke-width="2"/>
+      <text x="88" y="36" text-anchor="middle" fill="var(--accent)" font-weight="700" font-size="10.5">Root CA</text>
+      <text x="88" y="50" text-anchor="middle" fill="var(--text3)">Subject = Root CA</text>
+      <text x="88" y="63" text-anchor="middle" fill="var(--text3)">Issuer = Root CA ← self-signed</text>
+      <text x="88" y="76" text-anchor="middle" fill="var(--green)">CA=true, pathlen=1</text>
+      <text x="88" y="89" text-anchor="middle" fill="var(--text3)">→ Trust Store des Clients</text>
+
+      <!-- Arrow 1 -->
+      <line x1="165" y1="55" x2="205" y2="55" stroke="var(--accent)" stroke-width="2" marker-end="url(#ch-arr)"/>
+      <text x="185" y="48" text-anchor="middle" fill="var(--accent)" font-size="9">signiert</text>
+
+      <!-- Intermediate CA -->
+      <rect x="210" y="20" width="155" height="70" rx="5" fill="rgba(91,156,246,.08)" stroke="var(--blue)" stroke-width="1.5"/>
+      <text x="288" y="36" text-anchor="middle" fill="var(--blue)" font-weight="700" font-size="10.5">Intermediate CA</text>
+      <text x="288" y="50" text-anchor="middle" fill="var(--text3)">Subject = Intermediate CA</text>
+      <text x="288" y="63" text-anchor="middle" fill="var(--text3)">Issuer = Root CA</text>
+      <text x="288" y="76" text-anchor="middle" fill="var(--green)">CA=true, pathlen=0</text>
+      <text x="288" y="89" text-anchor="middle" fill="var(--text3)">Signatur gültig ← Root-Pub-Key</text>
+
+      <!-- Arrow 2 -->
+      <line x1="365" y1="55" x2="405" y2="55" stroke="var(--blue)" stroke-width="2" marker-end="url(#ch-arr)"/>
+      <text x="385" y="48" text-anchor="middle" fill="var(--blue)" font-size="9">signiert</text>
+
+      <!-- Leaf / Server Cert -->
+      <rect x="410" y="20" width="155" height="70" rx="5" fill="rgba(78,205,196,.08)" stroke="var(--teal)" stroke-width="1.5"/>
+      <text x="488" y="36" text-anchor="middle" fill="var(--teal)" font-weight="700" font-size="10.5">Server-Zertifikat</text>
+      <text x="488" y="50" text-anchor="middle" fill="var(--text3)">Subject = server.example.com</text>
+      <text x="488" y="63" text-anchor="middle" fill="var(--text3)">Issuer = Intermediate CA</text>
+      <text x="488" y="76" text-anchor="middle" fill="var(--red)">CA=false (Blatt)</text>
+      <text x="488" y="89" text-anchor="middle" fill="var(--text3)">Signatur gültig ← Inter-Pub-Key</text>
+    </svg>
+  </div>
+  <div class="box">
+    <div class="lbl">Kettenregel (Klausur!)</div>
+    <strong>Issuer von Zertifikat i = Subject von Zertifikat i+1.</strong> Die Root ist self-signed (Issuer = Subject). Vertrauen: Root muss im Client-Trust-Store vorhanden sein — sonst ist die Kette gültig, aber <em>nicht vertrauenswürdig</em>.
+  </div>
+
+  <h3>Kerberos — Ticket-basierte Authentifizierung</h3>
+  <div class="g2r">
+    <div>
+      <div class="box">
+        <div class="lbl">KDC – Key Distribution Center</div>
+        Das KDC besteht aus:<br>
+        <strong>AS</strong> (Authentication Server) — stellt TGTs aus<br>
+        <strong>TGS</strong> (Ticket Granting Server) — stellt Service-Tickets aus<br><br>
+        Das KDC kennt die <em>Langzeit-Schlüssel aller Nutzer und Dienste</em>.
+      </div>
+      <div class="box red">
+        <div class="lbl">Single Point of Trust</div>
+        Wer das <strong>KDC kontrolliert</strong>, kann beliebige Tickets ausstellen und jede Identität vortäuschen. Das KDC ist der zentrale Vertrauensanker — und damit auch der größte Schwachpunkt.
+      </div>
+    </div>
+    <div class="viz">
+      <svg viewBox="0 0 280 210" style="width:100%;height:auto" font-family="var(--sans)" font-size="9">
+        <defs>
+          <marker id="kb-r" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--blue)"/></marker>
+          <marker id="kb-l" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--accent)"/></marker>
+          <marker id="kb-g" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--green)"/></marker>
+        </defs>
+        <text x="40" y="12" text-anchor="middle" fill="var(--teal)" font-weight="700" font-size="9.5">Client</text>
+        <text x="140" y="12" text-anchor="middle" fill="var(--accent)" font-weight="700" font-size="9.5">KDC</text>
+        <text x="240" y="12" text-anchor="middle" fill="var(--green)" font-weight="700" font-size="9.5">Service</text>
+        <line x1="40" y1="15" x2="40" y2="205" stroke="var(--text3)" stroke-width="1" stroke-dasharray="2,2"/>
+        <line x1="140" y1="15" x2="140" y2="205" stroke="var(--text3)" stroke-width="1" stroke-dasharray="2,2"/>
+        <line x1="240" y1="15" x2="240" y2="205" stroke="var(--text3)" stroke-width="1" stroke-dasharray="2,2"/>
+
+        <line x1="43" y1="38" x2="134" y2="38" stroke="var(--blue)" stroke-width="1.3" marker-end="url(#kb-r)"/>
+        <text x="91" y="33" text-anchor="middle" fill="var(--blue)">① "Ich bin Alice"</text>
+
+        <line x1="137" y1="58" x2="43" y2="58" stroke="var(--accent)" stroke-width="1.3" marker-end="url(#kb-l)"/>
+        <text x="91" y="53" text-anchor="middle" fill="var(--accent)">② TGT + K_TGS</text>
+
+        <line x1="43" y1="88" x2="134" y2="88" stroke="var(--blue)" stroke-width="1.3" marker-end="url(#kb-r)"/>
+        <text x="91" y="83" text-anchor="middle" fill="var(--blue)">③ TGT + "Service S?"</text>
+
+        <line x1="137" y1="108" x2="43" y2="108" stroke="var(--accent)" stroke-width="1.3" marker-end="url(#kb-l)"/>
+        <text x="91" y="103" text-anchor="middle" fill="var(--accent)">④ Service-Ticket T_S</text>
+
+        <line x1="43" y1="138" x2="234" y2="138" stroke="var(--green)" stroke-width="1.3" marker-end="url(#kb-g)"/>
+        <text x="141" y="133" text-anchor="middle" fill="var(--green)">⑤ T_S</text>
+
+        <line x1="237" y1="158" x2="43" y2="158" stroke="var(--green)" stroke-width="1.3" marker-end="url(#kb-l)"/>
+        <text x="141" y="153" text-anchor="middle" fill="var(--green)">⑥ Zugang gewährt</text>
+
+        <rect x="10" y="170" width="260" height="32" rx="3" fill="rgba(232,160,37,.07)" stroke="var(--border)"/>
+        <text x="140" y="183" text-anchor="middle" fill="var(--text3)" font-size="8.5">Tickets sind verschlüsselt — Client</text>
+        <text x="140" y="196" text-anchor="middle" fill="var(--text3)" font-size="8.5">kann Inhalt nicht lesen/fälschen</text>
+      </svg>
+    </div>
+  </div>
+
+  <h3>Passwörter sicher speichern</h3>
+  <div class="g3">
+    <div class="card">
+      <h4 style="color:var(--red)">❌ Klartext</h4>
+      <p style="font-size:13px">Passwort direkt gespeichert. Datenbankeinbruch → alle Passwörter sofort lesbar.</p>
+      <div class="math" style="font-size:12px">Speicher: password</div>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--accent)">⚠ Nur H(pw)</h4>
+      <p style="font-size:13px">Angreifer baut <strong>Rainbow Tables</strong> (Vorab-Hashes häufiger Passwörter). Einmal berechnet → für jeden Server wiederverwendbar.</p>
+      <div class="math" style="font-size:12px">Speicher: SHA256("geheim")</div>
+    </div>
+    <div class="card">
+      <h4 style="color:var(--accent)">⚠ H(salt ∥ pw)</h4>
+      <p style="font-size:13px">Salt macht Rainbow Tables nutzlos. Aber: GPUs berechnen Milliarden SHA-256-Hashes/Sekunde. Salt allein reicht heute nicht!</p>
+      <div class="math" style="font-size:12px">Speicher: (salt, H(salt‖pw))</div>
+    </div>
+  </div>
+  <div class="box green" style="margin-top:10px">
+    <div class="lbl">Richtig: Langsame KDF (Argon2, bcrypt, scrypt)</div>
+    <code>Speicher: (salt, Argon2(salt‖pw, i=3, m=65536, p=4))</code><br><br>
+    Einstellbare Laufzeit macht GPU-Angriffe unlösbar. Salt ist zufällig und <strong>pro Nutzer eindeutig</strong>. KDF ist <em>absichtlich langsam</em> — das ist kein Bug, sondern Feature.
+  </div>
+
+  <h3>2-Faktor-Authentifizierung (2FA / MFA)</h3>
+  <div class="g2">
+    <div>
+      <table style="font-size:12.5px">
+        <tr><th>Faktor</th><th>Beispiele</th><th>Schwäche</th></tr>
+        <tr><td><strong>Wissen</strong></td><td>Passwort, PIN</td><td>Phishing, Datenleck</td></tr>
+        <tr><td><strong>Besitz</strong></td><td>OTP-Token, Handy (TOTP), FIDO2-Key</td><td>Verlust, Diebstahl</td></tr>
+        <tr><td><strong>Inhärenz</strong></td><td>Fingerabdruck, Gesicht, Iris</td><td>Unveränderbar bei Kompromittierung</td></tr>
+      </table>
+    </div>
+    <div class="box teal">
+      <div class="lbl">TOTP (Time-based OTP)</div>
+      Code = HMAC(shared_secret, floor(Zeit/30s))<br><br>
+      Codes sind <strong>zeitbasiert und nur einmal gültig</strong>. Angreifer sieht ggf. einen Code, kann ihn aber nicht wiederverwenden (Ablauf) und nicht im Voraus berechnen (ohne shared_secret).<br><br>
+      <strong>2FA-Threat-Model Online-Banking:</strong> Angreifer darf maximal einen Code sehen, aber nicht vorab nutzen.
+    </div>
+  </div>
+</section>
+
 <!-- ═══ QUIZ ═══ -->
 <section class="sec" id="quiz">
   <div class="sec-hd">
     <span class="sec-num qz">Quiz</span>
     <div>
       <div class="sec-title">Selbstcheck</div>
-      <div class="sec-sub">8 Fragen aus allen Vorlesungen</div>
+      <div class="sec-sub">15 Fragen aus allen Vorlesungen</div>
     </div>
   </div>
 
@@ -1230,6 +1834,55 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     <div class="q-opt" onclick="qa('q8',this,false)">3× 0x10</div>
   </div><div class="q-fb" id="q8f">16 − 13 = 3 fehlende Bytes → 3× 0x03. Das Padding-Byte gibt immer die Anzahl der Padding-Bytes an.</div></div>
 
+  <div class="q-card" id="q9"><div class="q-text">9. Wie erkennt man eine TLS-1.3-Ciphersuite am Namen?</div><div class="q-opts">
+    <div class="q-opt" onclick="qa('q9',this,true)">Das Format ist TLS_&lt;AEAD&gt;_&lt;HASH&gt; — kein Schlüsselaustausch oder Auth im Namen.</div>
+    <div class="q-opt" onclick="qa('q9',this,false)">Der Name enthält immer "ECDHE" am Anfang.</div>
+    <div class="q-opt" onclick="qa('q9',this,false)">TLS 1.3 Ciphersuiten haben kein SHA im Namen.</div>
+    <div class="q-opt" onclick="qa('q9',this,false)">TLS 1.3 nennt RSA oder ECDSA explizit im Namen.</div>
+  </div><div class="q-fb" id="q9f">TLS 1.3 entkoppelt Key-Exchange und Auth vom Namen. Format: TLS_AES_256_GCM_SHA384. Der KX ist immer ECDHE — steht nicht mehr drin. TLS 1.2: ECDHE-RSA-AES128-SHA256 (alle Teile sichtbar).</div></div>
+
+  <div class="q-card" id="q10"><div class="q-text">10. Was garantiert die CertificateVerify-Nachricht in TLS 1.3?</div><div class="q-opts">
+    <div class="q-opt" onclick="qa('q10',this,true)">Der Server signiert den gesamten Handshake-Transcript — verhindert Downgrade und bindet das Zertifikat an den DH-Schlüsselaustausch.</div>
+    <div class="q-opt" onclick="qa('q10',this,false)">Sie verschlüsselt die Certificate-Nachricht.</div>
+    <div class="q-opt" onclick="qa('q10',this,false)">Sie beweist, dass der Client das Zertifikat akzeptiert.</div>
+    <div class="q-opt" onclick="qa('q10',this,false)">Sie enthält den Session-Schlüssel verschlüsselt.</div>
+  </div><div class="q-fb" id="q10f">CertificateVerify signiert den Handshake-Transcript mit dem privaten Schlüssel des Servers. Das garantiert Authentizität + Integrität des Handshakes und verhindert Downgrade-Angriffe.</div></div>
+
+  <div class="q-card" id="q11"><div class="q-text">11. Welches Zertifikat in einer Kette muss bereits beim Client vorhanden sein?</div><div class="q-opts">
+    <div class="q-opt" onclick="qa('q11',this,false)">Das Server-Zertifikat (Blatt).</div>
+    <div class="q-opt" onclick="qa('q11',this,false)">Das Intermediate-CA-Zertifikat.</div>
+    <div class="q-opt" onclick="qa('q11',this,true)">Das Root-CA-Zertifikat muss im Trust Store des Clients vorhanden sein.</div>
+    <div class="q-opt" onclick="qa('q11',this,false)">Kein Zertifikat — der Client lädt alles vom Server.</div>
+  </div><div class="q-fb" id="q11f">Der Trust Anchor ist das Root-Zertifikat. Es ist self-signed (Issuer = Subject) und muss vom Client bereits als vertrauenswürdig eingestuft werden (Trust Store). Ohne das ist die Kette zwar gültig, aber nicht vertrauenswürdig.</div></div>
+
+  <div class="q-card" id="q12"><div class="q-text">12. Warum ist eine Kompromittierung des KDC bei Kerberos so fatal?</div><div class="q-opts">
+    <div class="q-opt" onclick="qa('q12',this,false)">Weil das KDC alle Passwörter im Klartext speichert.</div>
+    <div class="q-opt" onclick="qa('q12',this,true)">Das KDC kennt die Langzeitschlüssel aller Beteiligten und kann beliebige Tickets ausstellen — jede Identität ist fälschbar.</div>
+    <div class="q-opt" onclick="qa('q12',this,false)">Weil Kerberos kein Verschlüsselung verwendet.</div>
+    <div class="q-opt" onclick="qa('q12',this,false)">Weil das KDC auch den Traffic entschlüsseln kann.</div>
+  </div><div class="q-fb" id="q12f">Das KDC ist der zentrale Vertrauensanker (Single Point of Trust). Mit Zugriff auf alle Langzeitschlüssel kann der Angreifer für jeden Nutzer und jeden Dienst gültige Tickets erstellen.</div></div>
+
+  <div class="q-card" id="q13"><div class="q-text">13. Was sagt das Geburtstagsparadoxon über einen N-Bit-Hash aus?</div><div class="q-opts">
+    <div class="q-opt" onclick="qa('q13',this,false)">Der Hash ist gegen Kollisionen mit 2^N Sicherheit geschützt.</div>
+    <div class="q-opt" onclick="qa('q13',this,true)">Eine Kollision tritt nach etwa 2^(N/2) Versuchen auf — der Hash bietet nur N/2 Bit Kollisionsresistenz.</div>
+    <div class="q-opt" onclick="qa('q13',this,false)">Das Geburtstagsparadoxon gilt nur für Passwort-Hashing.</div>
+    <div class="q-opt" onclick="qa('q13',this,false)">Nach 2^N Versuchen ist eine Kollision garantiert.</div>
+  </div><div class="q-fb" id="q13f">Bei M=2^N möglichen Hashwerten tritt nach ~√M = 2^(N/2) Versuchen eine Kollision auf. SHA-256 (256 Bit) bietet daher nur 128 Bit Kollisionsresistenz. 64-Bit-Nonces können nach 2^32 ≈ 4 Mrd. Versuchen kollidieren.</div></div>
+
+  <div class="q-card" id="q14"><div class="q-text">14. Wie schützt man sich gegen Replay-Angriffe?</div><div class="q-opts">
+    <div class="q-opt" onclick="qa('q14',this,false)">Stärkere Verschlüsselung verwenden.</div>
+    <div class="q-opt" onclick="qa('q14',this,false)">Nur symmetrische Kryptographie einsetzen.</div>
+    <div class="q-opt" onclick="qa('q14',this,true)">Nonce, Timestamp oder Sequenznummer in jede Nachricht einbauen und Freshness prüfen.</div>
+    <div class="q-opt" onclick="qa('q14',this,false)">Den Kanal mit TLS absichern reicht aus.</div>
+  </div><div class="q-fb" id="q14f">Replay-Angriffe senden unveränderte gültige Nachrichten — der MAC ist korrekt! Schutz: Nonce (einmalige Zufallszahl), Timestamp (Nachricht darf nicht älter als X Sekunden sein), oder Sequenzzähler (monoton steigend).</div></div>
+
+  <div class="q-card" id="q15"><div class="q-text">15. Warum reicht Salt allein heute nicht mehr für Passwort-Hashing?</div><div class="q-opts">
+    <div class="q-opt" onclick="qa('q15',this,false)">Salt ist zu kurz.</div>
+    <div class="q-opt" onclick="qa('q15',this,false)">Salt verhindert keine Kollisionen.</div>
+    <div class="q-opt" onclick="qa('q15',this,true)">Moderne GPUs berechnen Milliarden einfache Hashes pro Sekunde — langsame KDFs wie Argon2 sind nötig, um Brute-Force unlösbar zu machen.</div>
+    <div class="q-opt" onclick="qa('q15',this,false)">Salt macht den Hash länger und damit unsicherer.</div>
+  </div><div class="q-fb" id="q15f">Salt verhindert Vorab-Tabellen (Rainbow Tables), aber nicht Brute-Force. GPUs erreichen >10 Mrd. SHA-256-Hashes/Sekunde. Argon2/bcrypt/scrypt machen jeden einzelnen Versuch teuer (Speicher + Zeit) und schützen so auch kurze Passwörter.</div></div>
+
   <div id="qres" style="display:none;margin-top:16px;text-align:center">
     <div style="font-family:var(--sans);font-size:20px;font-weight:800;color:var(--accent)" id="qrt"></div>
     <div style="color:var(--text2);font-size:13.5px;margin-top:4px" id="qrs"></div>
@@ -1267,10 +1920,10 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <text x="548" y="74" text-anchor="middle" fill="var(--text3)" font-size="9.5">PKI / Zertifikate</text>
       <text x="548" y="88" text-anchor="middle" fill="var(--text3)" font-size="9.5">PQC: ML-DSA</text>
 
-      <rect x="150" y="130" width="345" height="55" rx="6" fill="rgba(78,205,196,.07)" stroke="var(--teal)" stroke-width="1.8"/>
-      <text x="322" y="150" text-anchor="middle" fill="var(--teal)" font-weight="700" font-size="12">TLS 1.3 — Alles kombiniert</text>
-      <text x="322" y="167" text-anchor="middle" fill="var(--text3)" font-size="10">ECDH Key Exchange → AES-GCM (AEAD) + ECDSA Zertifikate</text>
-      <text x="322" y="182" text-anchor="middle" fill="var(--text3)" font-size="9.5">Hybrid PQC in Vorbereitung (ML-KEM + ECDH)</text>
+      <rect x="100" y="130" width="440" height="60" rx="6" fill="rgba(78,205,196,.07)" stroke="var(--teal)" stroke-width="1.8"/>
+      <text x="320" y="150" text-anchor="middle" fill="var(--teal)" font-weight="700" font-size="12">TLS 1.3 — Alles kombiniert</text>
+      <text x="320" y="166" text-anchor="middle" fill="var(--text3)" font-size="10">ECDHE Key Exchange (PFS) → AES-GCM (AEAD) + ECDSA Zertifikate (PKI)</text>
+      <text x="320" y="182" text-anchor="middle" fill="var(--text3)" font-size="9.5">CertificateVerify verhindert Downgrade · Hybrid PQC (ML-KEM + ECDH) in Vorbereitung</text>
 
       <line x1="98" y1="106" x2="210" y2="130" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,3"/>
       <line x1="322" y1="106" x2="322" y2="130" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,3"/>
@@ -1292,6 +1945,10 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     <tr><td>RSA Dec</td><td><code>P = C^d mod N</code></td><td>K_priv = (N,d)</td></tr>
     <tr><td>DH Geheimnis</td><td><code>K = g^(ab) mod N</code></td><td>= B^a = A^b</td></tr>
     <tr><td>PKCS#7</td><td><code>pad = n − (|m| mod n)</code></td><td>n = Blockgröße</td></tr>
+    <tr><td>Birthday (Kollis.)</td><td><code>k ≈ 1,18 · 2^(N/2)</code></td><td>N-Bit-Hash → nur N/2 Bit</td></tr>
+    <tr><td>TLS 1.3 Cipher</td><td><code>TLS_&lt;AEAD&gt;_&lt;HASH&gt;</code></td><td>Kein KX/Auth im Namen</td></tr>
+    <tr><td>Zertifikatskette</td><td><code>Issuer[i] = Subject[i+1]</code></td><td>Root: selbst-signiert</td></tr>
+    <tr><td>TOTP (2FA)</td><td><code>HMAC(secret, ⌊t/30⌋)</code></td><td>Zeitbasiertes OTP</td></tr>
   </table>
 </section>
 
@@ -1391,10 +2048,183 @@ function doDH(){
       <span style="word-break:break-all">${pw.slice(0,18).join(' · ')}${pw.length>18?' ...':''}</span>
     </div>`;
 }
-document.addEventListener('DOMContentLoaded',doDH);
+doDH();
+
+// ── Häufigkeitsanalyse ──
+function freqAnalysis(){
+  const inp=document.getElementById('fa-in');
+  const shEl=document.getElementById('fa-sh');
+  if(!inp||!shEl)return;
+  const raw=inp.value.toUpperCase();
+  const k=parseInt(shEl.value,10);
+  const letters=raw.replace(/[^A-Z]/g,'');
+  const total=letters.length||1;
+  const cnt={};
+  for(const c of letters)cnt[c]=(cnt[c]||0)+1;
+  const de={A:37,B:11,C:18,D:29,E:100,F:10,G:17,H:28,I:44,J:2,K:7,L:20,M:14,N:56,O:14,P:6,Q:0,R:40,S:42,T:35,U:25,V:5,W:11,X:0,Y:0,Z:6};
+  const alpha='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const maxCnt=Math.max(1,...alpha.split('').map(c=>cnt[c]||0));
+
+  // SVG chart: X-axis = decoded (plaintext) letter A–Z (fixed)
+  // Bar height = freq of ciphertext letter that maps to this decoded position → shifts with k
+  // Teal line = German reference for the decoded letter (fixed)
+  const CW=18, GAP=2, BH=52, LBL=12, CT=11, PAD=2;
+  const svgW=26*(CW+GAP)-GAP;
+  const svgH=BH+LBL+CT+PAD;
+  let bars='', lbls='', ctlbls='';
+  for(let i=0;i<26;i++){
+    const x=i*(CW+GAP);
+    const ctIdx=(i+k)%26;            // which ciphertext letter decodes to plaintext i
+    const ctLetter=alpha[ctIdx];
+    const h=Math.round((cnt[ctLetter]||0)/maxCnt*BH);
+    const deH=Math.round((de[alpha[i]]||0)/100*BH);  // German ref for plaintext letter i
+    if(h>0) bars+=`<rect x="${x}" y="${BH-h}" width="${CW}" height="${h}" fill="var(--accent)" opacity=".85" rx="1"/>`;
+    if(deH>0) bars+=`<line x1="${x}" y1="${BH-deH}" x2="${x+CW}" y2="${BH-deH}" stroke="var(--teal)" stroke-width="1.5" opacity=".7"/>`;
+    // Bottom row: decoded (plaintext) letter — always fixed
+    lbls+=`<text x="${x+CW/2}" y="${BH+LBL}" text-anchor="middle" fill="var(--text3)" font-size="9">${alpha[i]}</text>`;
+    // Top row: which ciphertext letter sits here — shifts with k
+    if(k!==0) ctlbls+=`<text x="${x+CW/2}" y="${BH+LBL+CT}" text-anchor="middle" fill="var(--purple)" font-size="8" opacity=".8">${ctLetter}</text>`;
+  }
+  const svgEl=document.getElementById('fa-chart');
+  if(svgEl) svgEl.innerHTML=
+    `<svg viewBox="0 0 ${svgW} ${svgH}" style="width:100%;height:auto;display:block" font-family="var(--mono)">`+
+    bars+lbls+ctlbls+'</svg>';
+
+  const legEl=document.getElementById('fa-legend');
+  if(legEl) legEl.innerHTML=
+    `<span style="display:inline-block;width:12px;height:8px;background:var(--accent);opacity:.85;border-radius:1px;vertical-align:middle;margin-right:3px"></span>Häufigkeit Ciphertext`+
+    `&nbsp;&nbsp;<span style="display:inline-block;width:14px;height:2px;background:var(--teal);opacity:.7;vertical-align:middle;margin-right:3px"></span>Deutsch-Referenz`+
+    (k!==0?`&nbsp;&nbsp;<span style="color:var(--purple);font-size:8.5px">← Ciphertext-Buchstabe</span>`:'')+
+    `<br><span style="font-size:8.5px;opacity:.7">Unten: Klartext-Buchstabe (A–Z) · Balken verschieben sich mit k</span>`;
+
+  // Decode full text
+  let dec='';
+  for(const c of raw){
+    const n=c.charCodeAt(0);
+    if(n>=65&&n<=90) dec+=String.fromCharCode((n-65-k+2600)%26+65);
+    else dec+=c;
+  }
+  const outEl=document.getElementById('fa-out');
+  if(outEl) outEl.textContent=dec||'—';
+  const kv2El=document.getElementById('fa-kv2');
+  if(kv2El) kv2El.textContent=k;
+
+  const sorted=alpha.split('').filter(c=>cnt[c]).sort((a,b)=>(cnt[b]||0)-(cnt[a]||0));
+  const top=sorted.slice(0,3).map(c=>`${c}(${Math.round((cnt[c]||0)/total*100)}%)`).join(' ');
+  const infoEl=document.getElementById('fa-info');
+  if(infoEl) infoEl.textContent=`${letters.length} Buchst. analysiert · Häufigste: ${top||'—'}`;
+}
+freqAnalysis();
+
+// ── Birthday Paradox ──
+function bdCalc(){
+  const N=+document.getElementById('bd-n').value;
+  const half=Math.ceil(N/2);
+  const feas={32:'~2 Mrd. (GPU: Sekunden!)',64:'~4 Mrd. (GPU: Minuten!)',128:'~1,8×10¹⁹ (nicht machbar)',160:'~1,2×10²⁴ (nicht machbar)',256:'~3,4×10³⁸ (absolut unmöglich)'};
+  const color=N<=64?'red':N<=128?'accent':'green';
+  const note=N<=64?'<span style="color:var(--red)">⚠ In der Praxis angreifbar!</span>':'<span style="color:var(--green)">✓ Sicher gegen aktuelle Angreifer</span>';
+  document.getElementById('bd-out').innerHTML=`
+    <div class="g2" style="margin-top:10px">
+      <div class="box"><div class="lbl">Mögliche Werte</div>M = 2<sup>${N}</sup></div>
+      <div class="box ${color}"><div class="lbl">50%-Kollision nach</div>
+        k ≈ 2<sup>${half}</sup> Versuche<br>
+        <small style="color:var(--text3)">${feas[N]||'sehr viel'}</small>
+      </div>
+    </div>
+    <div class="box" style="margin-top:6px;font-size:13px">
+      <div class="lbl">Effektive Sicherheit</div>
+      ${N}-Bit-Hash → nur <strong>${half} Bit Kollisionsresistenz</strong>. ${note}
+    </div>`;
+}
+bdCalc();
+
+// ── RSA Rechner ──
+function isPrime(n){if(n<2)return false;if(n<4)return true;if(n%2===0||n%3===0)return false;for(let i=5;i*i<=n;i+=6)if(n%i===0||n%(i+2)===0)return false;return true;}
+function modPowB(b,e,m){let r=1n;b=b%m;while(e>0n){if(e%2n===1n)r=r*b%m;e=e/2n;b=b*b%m}return r}
+function modInvB(a,m){let[or,r]=[a,m],[os,s]=[1n,0n];while(r!==0n){const q=or/r;[or,r]=[r,or-q*r];[os,s]=[s,os-q*s]}return or===1n?((os%m)+m)%m:null}
+function gcdB(a,b){while(b!==0n){[a,b]=[b,a%b]}return a}
+function rsaCalc(){
+  const pv=+document.getElementById('rp').value,qv=+document.getElementById('rq').value;
+  const ev=+document.getElementById('re').value,mv=+document.getElementById('rm').value;
+  const out=document.getElementById('rsa-out');
+  if(!isPrime(pv)||!isPrime(qv))return out.innerHTML='<div class="box red"><div class="lbl">Fehler</div>p und q müssen Primzahlen sein!</div>';
+  if(pv===qv)return out.innerHTML='<div class="box red"><div class="lbl">Fehler</div>p ≠ q erforderlich!</div>';
+  const p=BigInt(pv),q=BigInt(qv),e=BigInt(ev),m=BigInt(mv);
+  const N=p*q,phi=(p-1n)*(q-1n);
+  if(gcdB(e,phi)!==1n)return out.innerHTML=`<div class="box red"><div class="lbl">Fehler</div>e=${ev} ist nicht teilerfremd zu φ(N)=${phi}. Wähle ein anderes e (z.B. 3, 7, 17, 65537).</div>`;
+  if(e<=1n||e>=phi)return out.innerHTML='<div class="box red"><div class="lbl">Fehler</div>e muss gelten: 1 &lt; e &lt; φ(N).</div>';
+  const d=modInvB(e,phi);
+  if(d===null)return out.innerHTML='<div class="box red"><div class="lbl">Fehler</div>Kein modulares Inverses gefunden.</div>';
+  if(m>=N)return out.innerHTML=`<div class="box red"><div class="lbl">Fehler</div>Nachricht m=${mv} muss kleiner als N=${N} sein!</div>`;
+  const c=modPowB(m,e,N),dec=modPowB(c,d,N);
+  out.innerHTML=`
+    <div class="g2" style="margin-top:10px">
+      <div class="box"><div class="lbl">Schlüsselgenerierung</div>
+        N = p·q = ${p}·${q} = <strong>${N}</strong><br>
+        φ(N) = (p−1)(q−1) = ${p-1n}·${q-1n} = <strong>${phi}</strong><br>
+        e = <strong>${e}</strong> &nbsp; ggT(e,φ)=${gcdB(e,phi)}<br>
+        d = e⁻¹ mod φ(N) = <strong>${d}</strong>
+      </div>
+      <div class="box teal"><div class="lbl">Schlüsselpaar</div>
+        <strong>K_pub = (N=${N}, e=${e})</strong><br>
+        <strong>K_priv = (N=${N}, d=${d})</strong>
+      </div>
+    </div>
+    <div class="g2" style="margin-top:8px">
+      <div class="box green"><div class="lbl">Verschlüsseln: C = m<sup>e</sup> mod N</div>
+        C = ${m}<sup>${e}</sup> mod ${N} = <strong style="font-size:16px">${c}</strong>
+      </div>
+      <div class="box blue"><div class="lbl">Entschlüsseln: m = C<sup>d</sup> mod N</div>
+        m = ${c}<sup>${d}</sup> mod ${N} = <strong style="font-size:16px">${dec}</strong>
+        ${dec===m?'<br><span style="color:var(--green)">✓ Korrekt!</span>':'<br><span style="color:var(--red)">✗ Fehler</span>'}
+      </div>
+    </div>`;
+}
+rsaCalc();
+
+// ── TLS Ciphersuite Decoder ──
+function tlsDecode(){
+  const cs=document.getElementById('tls-in').value.trim();
+  const out=document.getElementById('tls-out');
+  // TLS 1.3: TLS_<AEAD>_<HASH>
+  const m13=cs.match(/^TLS_(AES_128_GCM|AES_256_GCM|CHACHA20_POLY1305)_(SHA256|SHA384|SHA512)$/i);
+  if(m13){
+    const aeadMap={'AES_128_GCM':'AES-128-GCM (128-Bit-Schlüssel, AEAD)','AES_256_GCM':'AES-256-GCM (256-Bit-Schlüssel, AEAD)','CHACHA20_POLY1305':'ChaCha20+Poly1305 (Stream, AEAD)'};
+    const aead=aeadMap[m13[1].toUpperCase()]||m13[1];
+    const hash='SHA-'+m13[2].replace('SHA','');
+    out.innerHTML=`<div class="box green"><div class="lbl">✓ TLS 1.3 Ciphersuite</div>
+      <table style="font-size:13px;margin:4px 0"><tr><th>Komponente</th><th>Wert</th><th>Bedeutung</th></tr>
+      <tr><td>AEAD Cipher</td><td><code>${m13[1]}</code></td><td>${aead}</td></tr>
+      <tr><td>Hash (PRF)</td><td><code>${hash}</code></td><td>Für HKDF Schlüsselableitung</td></tr>
+      <tr><td>Key Exchange</td><td><em>immer ECDHE</em></td><td>Nicht im Namen — TLS 1.3 erzwingt PFS</td></tr>
+      </table></div>`;
+    return;
+  }
+  // TLS 1.2 dash-separated or WITH-style
+  const m12=cs.match(/^(ECDHE|DHE|RSA)[-_](ECDSA|RSA)[-_](AES\d+|CHACHA20)[-_]?(GCM|CBC|POLY1305)?[-_]?(SHA\d*)$/i);
+  if(m12||cs.includes('WITH')){
+    let parts=cs.includes('WITH')?cs.replace(/TLS_/i,'').split(/_?WITH_?/):null;
+    let kx=m12?m12[1]:'?',auth=m12?m12[2]:'?',cipher=m12?m12[3]+(m12[4]?'-'+m12[4]:''):'?',mac=m12?m12[5]:'?';
+    if(parts&&parts.length===2){const l=parts[0].split('_');const r=parts[1].split('_');kx=l[0];auth=l[1]||'?';cipher=r.slice(0,-1).join('-');mac=r[r.length-1];}
+    const pfs=(kx.toUpperCase().includes('DHE'))?'<span style="color:var(--green)">✓ PFS (ephemerer DH)</span>':'<span style="color:var(--red)">✗ Kein PFS (RSA-Key-Exchange)</span>';
+    out.innerHTML=`<div class="box"><div class="lbl">TLS 1.2 Ciphersuite</div>
+      <table style="font-size:13px;margin:4px 0"><tr><th>Komponente</th><th>Wert</th></tr>
+      <tr><td>Key Exchange</td><td><code>${kx}</code> &nbsp; ${pfs}</td></tr>
+      <tr><td>Authentifizierung</td><td><code>${auth}</code></td></tr>
+      <tr><td>Symmetric Cipher</td><td><code>${cipher}</code></td></tr>
+      <tr><td>MAC / Hash</td><td><code>${mac}</code></td></tr>
+      </table>
+      <div style="margin-top:6px;font-size:12.5px;color:var(--text3)">Tipp: TLS 1.3 wäre kürzer: TLS_${cipher.replace('-','_')}_${mac}.</div></div>`;
+    return;
+  }
+  out.innerHTML=`<div class="box red"><div class="lbl">Nicht erkannt</div>Beispiele:<br>
+    TLS 1.3: <code>TLS_AES_256_GCM_SHA384</code><br>
+    TLS 1.2: <code>ECDHE-RSA-AES128-SHA256</code> oder <code>TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256</code></div>`;
+}
+tlsDecode();
 
 // ── Quiz ──
-let qs=0,qa_=0;const qT=8;
+let qs=0,qa_=0;const qT=15;
 function qa(id,el,ok){
   const card=document.getElementById(id);
   if(card.dataset.done)return;
