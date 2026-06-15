@@ -150,6 +150,17 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
 .badge{display:inline-block;font-family:var(--sans);font-size:9.5px;font-weight:700;letter-spacing:.06em;padding:1px 7px;border-radius:20px;text-transform:uppercase}
 .b-ok{background:rgba(86,184,112,.2);color:var(--green)}.b-bad{background:rgba(224,84,84,.15);color:var(--red)}.b-warn{background:rgba(232,160,37,.2);color:var(--accent)}.b-info{background:rgba(91,156,246,.2);color:var(--blue)}
 
+/* ── Lernziele ── */
+.lernziele{border:1px solid rgba(91,156,246,.3);border-radius:6px;margin-bottom:18px;background:rgba(91,156,246,.04)}
+.lernziele summary{padding:7px 12px;font-size:11px;font-weight:700;color:var(--blue);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;user-select:none;list-style:none}
+.lernziele summary::before{content:'▶ ';font-size:9px}
+details[open].lernziele summary::before{content:'▼ '}
+.lernziele ul{margin:0;padding:6px 12px 10px 28px;font-size:12.5px;color:var(--text2);line-height:1.8}
+
+/* ── Praxis-Callout ── */
+.callout-practice{background:rgba(176,136,249,.07);border-left:3px solid var(--purple);border-radius:0 6px 6px 0;padding:8px 12px;font-size:12.5px;color:var(--text2);margin:14px 0}
+.callout-practice strong{color:var(--purple)}
+
 /* ── Bit grid ── */
 .bits{display:flex;gap:3px;flex-wrap:wrap;margin:4px 0;font-family:var(--mono);font-size:13px}
 .bit{width:26px;height:26px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-weight:700;border:1px solid transparent}
@@ -256,6 +267,12 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">Schutzziele · STRIDE · Kerckhoffs · Bedrohungsmodellierung</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>CIA-Schutzziele benennen und an Beispielen erklären können</li>
+    <li>STRIDE-Bedrohungen Schutzziel-Verletzungen zuordnen</li>
+    <li>Kerckhoffs' Prinzip und „Security by Obscurity" unterscheiden</li>
+    <li>Einen Angriff gegen ein konkretes Schutzziel klassifizieren</li>
+  </ul></details>
 
   <h3>Die sechs Schutzziele</h3>
   <div class="viz">
@@ -344,6 +361,12 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">Chiffren · Schlüsselraum · Klassische Kryptographie · Caesar</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>Chiffre formal definieren: Γ = (E, D), Korrektheit</li>
+    <li>Schlüsselraum berechnen und Brute-Force-Aufwand abschätzen</li>
+    <li>Caesar, Substitution und Häufigkeitsanalyse erklären und anwenden</li>
+    <li>Erklären warum klassische Chiffren IND-Sicherheit verletzen</li>
+  </ul></details>
 
   <div class="g2r">
     <div>
@@ -446,6 +469,12 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">One-Time-Pad · Shannon-Sicherheit · IND-Sicherheit</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>Perfekte Sicherheit (Shannon) formal definieren</li>
+    <li>Warum OTP perfekte Sicherheit garantiert — und warum es unpraktisch ist</li>
+    <li>IND-EAV-Spiel erklären: Challenger, Adversary, Vorteil</li>
+    <li>Two-Time-Pad-Angriff und XOR-Eigenschaften verstehen</li>
+  </ul></details>
 
   <div class="g2r">
     <div>
@@ -547,6 +576,13 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">AES · PKCS#7 · ECB · CBC · CTR · Padding Oracle</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>AES-Schlüssellängen (128/192/256 Bit) und Blockgröße (128 Bit) nennen</li>
+    <li>PKCS#7-Padding berechnen und verifizieren</li>
+    <li>ECB, CBC, CTR und GCM erklären — Vor- und Nachteile je Modus</li>
+    <li>Padding-Oracle-Angriff auf CBC beschreiben</li>
+    <li>ECB-Pinguin-Effekt erklären (IND-Verletzung)</li>
+  </ul></details>
 
   <div class="g2">
     <div class="box">
@@ -557,8 +593,9 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     </div>
     <div class="box teal">
       <div class="lbl">Streamchiffren</div>
-      <strong>Salsa20 / ChaCha20:</strong> modern, sicher.<br>
-      <span style="color:var(--red)"><strong>RC4:</strong> veraltet, gebrochen!</span>
+      <strong>ChaCha20</strong> <span class="badge b-ok">🟢 Empfohlen</span> — modern, sicher, schnell ohne AES-NI.<br>
+      <strong>Salsa20</strong> <span class="badge b-ok">🟢 OK</span> — Vorgänger von ChaCha20.<br>
+      <strong>RC4</strong> <span class="badge b-bad">🔴 Gebrochen</span> — seit 2015 verboten (RFC 7465).
     </div>
   </div>
 
@@ -587,7 +624,8 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div>
         <h4>ECB – Electronic Code Book <span class="badge b-bad">Niemals verwenden</span></h4>
         <p style="font-size:13.5px">Jeder Block wird unabhängig mit demselben Schlüssel verschlüsselt. Kein IV. Deterministisch.</p>
-        <div class="box red"><div class="lbl">Problem</div>Gleicher Plaintextblock → immer gleicher Ciphertextblock. Muster im Plaintext bleiben sichtbar. (Pinguin-Demo!) IND-Sicherheit <strong>verletzt</strong>.</div>
+        <div class="box red"><div class="lbl">Problem</div>Gleicher Plaintextblock → immer gleicher Ciphertextblock. Muster im Plaintext bleiben sichtbar — IND-Sicherheit <strong>verletzt</strong>. Sieh selbst:</div>
+        <div id="ecb-demo" style="margin-top:10px"></div>
       </div>
       <div class="viz">
         <svg viewBox="0 0 200 120" style="width:100%;height:auto" font-family="var(--mono)" font-size="10">
@@ -756,6 +794,7 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     </div>
   </div>
 
+  <div class="callout-practice"><strong>In der Praxis:</strong> GCM ist heute der Standard — verwendet in TLS 1.3, WireGuard, Signal und AWS. CBC ist nur noch in Legacy-Systemen; ECB darf in keinem neuen System auftauchen. ChaCha20-Poly1305 ist die Alternative ohne AES-Hardware (z.B. auf Mobilgeräten ohne AES-NI).</div>
   <h3>Vergleichsübersicht</h3>
   <table>
     <tr><th>Modus</th><th>IV/Nonce</th><th>Padding</th><th>Parallelisierbar</th><th>Integrität</th><th>Fazit</th></tr>
@@ -775,6 +814,12 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">EAV · CPA · CCA · Authenticated Encryption · AEAD</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>EAV, KPA, CPA und CCA in aufsteigender Stärke einordnen</li>
+    <li>Unterschied AE vs. AEAD (Additional Data) erklären</li>
+    <li>Encrypt-then-MAC vs. MAC-then-Encrypt vs. Encrypt-and-MAC vergleichen</li>
+    <li>Warum kein selbst kombiniertes AES+HMAC statt GCM?</li>
+  </ul></details>
 
   <div class="g2r">
     <div>
@@ -850,6 +895,13 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">Kollisionsresistenz · SHA · Passwort-Hashing · Salt · Argon2</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>Preimage-Resistenz, 2nd-Preimage-Resistenz und Kollisionsresistenz unterscheiden</li>
+    <li>Geburtstagsparadoxon und 2^(N/2) Komplexität erklären</li>
+    <li>MD5, SHA-1, SHA-256, SHA-3 statusmäßig einordnen</li>
+    <li>Warum ist Salt notwendig? Was verhindert er, was nicht?</li>
+    <li>Argon2-Parameter i, m, p und ihre Wirkung erklären</li>
+  </ul></details>
 
   <div class="g2r">
     <div>
@@ -869,11 +921,11 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <h3>Algorithmen</h3>
       <table style="font-size:12.5px">
         <tr><th>Hash</th><th>Bits</th><th>Status</th></tr>
-        <tr><td>MD5</td><td>128</td><td class="cx">Gebrochen (2004)</td></tr>
-        <tr><td>SHA-1</td><td>160</td><td class="cw">Unsicher</td></tr>
-        <tr><td>SHA-256</td><td>256</td><td class="ck">Sicher</td></tr>
-        <tr><td>SHA-384/512</td><td>384/512</td><td class="ck">Sicher</td></tr>
-        <tr><td>SHA-3</td><td>var.</td><td class="ck">Sicher (anderes Design)</td></tr>
+        <tr><td><strong>MD5</strong></td><td>128</td><td><span class="badge b-bad">🔴 Gebrochen 2004</span></td></tr>
+        <tr><td><strong>SHA-1</strong></td><td>160</td><td><span class="badge b-warn">🟡 Veraltet</span></td></tr>
+        <tr><td><strong>SHA-256</strong></td><td>256</td><td><span class="badge b-ok">🟢 Empfohlen</span></td></tr>
+        <tr><td><strong>SHA-384/512</strong></td><td>384/512</td><td><span class="badge b-ok">🟢 Empfohlen</span></td></tr>
+        <tr><td><strong>SHA-3</strong></td><td>var.</td><td><span class="badge b-ok">🟢 Empfohlen</span></td></tr>
       </table>
     </div>
   </div>
@@ -913,6 +965,18 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     </div>
   </div>
 
+  <h3>Avalanche-Effekt</h3>
+  <p style="font-size:13.5px;color:var(--text2);margin-bottom:10px">Eine einzelne Bit-Änderung im Input flippt ~50% der Output-Bits — der Hash ist dadurch <strong>nicht umkehrbar</strong> und <strong>nicht vorhersagbar</strong>.</p>
+  <div class="tool" id="tool-avalanche">
+    <div class="tool-title">Avalanche-Effekt Demo</div>
+    <div class="g2r" style="gap:10px">
+      <div class="tg"><label>Text A</label><input id="av-a" type="text" value="Hallo Welt" oninput="avalanche()"></div>
+      <div class="tg"><label>Text B (1 Zeichen ändern!)</label><input id="av-b" type="text" value="Hallo welt" oninput="avalanche()"></div>
+    </div>
+    <div id="av-out" style="margin-top:10px"></div>
+  </div>
+
+  <div class="callout-practice"><strong>In der Praxis:</strong> SHA-256 findet sich überall: TLS-Zertifikate, Git-Commit-Hashes, Bitcoin-Mining, JWT-Signaturen. SHA-3 (Keccak) ist die unabhängige Alternative mit anderem Design (Sponge-Funktion). Für Passwörter gilt: niemals SHA-256 direkt — immer Argon2id (z.B. in Bitwarden, 1Password, Django 4+).</div>
   <h3>Passwort-Hashing &amp; KDFs</h3>
   <div class="g2">
     <div class="box red">
@@ -984,6 +1048,13 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">HMAC · RSA · Diffie-Hellman · Digitale Signaturen</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>MAC von Hash und Verschlüsselung abgrenzen (MAC = Integrität + Herkunft)</li>
+    <li>Length Extension Attack auf H(K∥m) erklären und HMAC als Lösung benennen</li>
+    <li>RSA-Schlüsselgenerierung (p, q, N, φ, e, d) schrittweise durchführen</li>
+    <li>Verschlüsseln vs. Signieren mit RSA unterscheiden (Reihenfolge der Schlüssel!)</li>
+    <li>DH-Schlüsselaustausch und MITM-Angriff erklären</li>
+  </ul></details>
 
   <div class="g2">
     <div>
@@ -994,11 +1065,12 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
         Ausgabe: Authentication Tag — beweist Integrität <em>und</em> Herkunft.
       </div>
       <table style="font-size:12.5px;margin-top:8px">
-        <tr><th>MAC</th><th>Basis</th></tr>
-        <tr><td><strong>HMAC</strong></td><td>Hash (SHA-256)</td></tr>
-        <tr><td><strong>CMAC</strong></td><td>AES-CBC</td></tr>
-        <tr><td><strong>Poly1305</strong></td><td>Polynom. Algebra</td></tr>
-        <tr><td><strong>GHASH</strong></td><td>Teil von AES-GCM</td></tr>
+        <tr><th>MAC</th><th>Basis</th><th>Status</th></tr>
+        <tr><td><strong>HMAC-SHA256</strong></td><td>Hash</td><td><span class="badge b-ok">🟢 Standard</span></td></tr>
+        <tr><td><strong>CMAC</strong></td><td>AES-CBC</td><td><span class="badge b-ok">🟢 OK</span></td></tr>
+        <tr><td><strong>Poly1305</strong></td><td>Polynom</td><td><span class="badge b-ok">🟢 Empfohlen</span></td></tr>
+        <tr><td><strong>GHASH</strong></td><td>AES-GCM</td><td><span class="badge b-ok">🟢 Standard</span></td></tr>
+        <tr><td><strong>H(K∥m)</strong></td><td>Naiv</td><td><span class="badge b-bad">🔴 Angreifbar</span></td></tr>
       </table>
     </div>
     <div>
@@ -1011,6 +1083,19 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
         <div class="lbl">Richtig: HMAC</div>
         <code>H((K⊕opad) ∥ H((K⊕ipad) ∥ m))</code><br>
         Verhindert Length Extension durch doppeltes Hashing mit verschiedenen Padding-Schlüsseln.
+      </div>
+      <div class="tool" id="tool-lea" style="margin-top:12px">
+        <div class="tool-title">Length Extension Angriff — interaktiv</div>
+        <div class="tg" style="margin-bottom:6px"><label>Schlüssel K (geheim, nur zur Demo)</label>
+          <input id="lea-k" type="text" value="geheim" oninput="leaCalc()">
+        </div>
+        <div class="tg" style="margin-bottom:6px"><label>Originalnachricht m</label>
+          <input id="lea-m" type="text" value="amount=100" oninput="leaCalc()">
+        </div>
+        <div class="tg" style="margin-bottom:10px"><label>Anhang m' (Angreifer hängt an)</label>
+          <input id="lea-ext" type="text" value="&admin=true" oninput="leaCalc()">
+        </div>
+        <div id="lea-out"></div>
       </div>
     </div>
   </div>
@@ -1034,6 +1119,7 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     </div>
   </div>
 
+  <div class="callout-practice"><strong>In der Praxis:</strong> HMAC-SHA256 ist der Standard für API-Signaturen (AWS Signature V4, GitHub Webhooks). Poly1305 (kombiniert mit ChaCha20) wird im Signal-Protokoll und WireGuard verwendet. GHASH ist intern in AES-GCM — du nutzt es jedes Mal wenn du HTTPS verwendest.</div>
   <h3>Asymmetrische Kryptographie &amp; RSA</h3>
   <div class="g2r">
     <div>
@@ -1142,6 +1228,55 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       </div>
     </div>
   </div>
+
+  <div class="callout-practice"><strong>In der Praxis:</strong> RSA-2048 ist noch verbreitet (TLS-Zertifikate, SSH), aber ECC (ECDSA, Ed25519) ist effizienter bei gleicher Sicherheit. Ed25519 (256-Bit) ≈ RSA-3072 Sicherheit bei 10× kürzeren Schlüsseln. Diffie-Hellman in Form von ECDHE (Elliptic Curve) ist der Standard in TLS 1.3 — reines RSA-Key-Exchange ist dort verboten.</div>
+  <h3>DH ohne Authentifizierung — MITM-Angriff</h3>
+  <p style="font-size:13.5px;color:var(--text2);margin-bottom:10px">Ungesichertes Diffie-Hellman ist anfällig für einen <strong>Man-in-the-Middle-Angriff</strong>: Mallory schaltet sich ein und baut mit beiden Seiten separat einen DH-Schlüssel auf. Zertifikate (PKI, V11) verhindern das.</p>
+  <div class="viz">
+    <svg viewBox="0 0 440 210" style="width:100%;height:auto" font-family="var(--sans)" font-size="10">
+      <defs>
+        <marker id="dh-arr" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--blue)"/></marker>
+        <marker id="dh-arr-r" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="var(--red)"/></marker>
+      </defs>
+      <!-- Entities -->
+      <rect x="5" y="20" width="72" height="30" rx="4" fill="var(--bg4)" stroke="var(--teal)" stroke-width="1.3"/>
+      <text x="41" y="39" text-anchor="middle" fill="var(--teal)" font-weight="700">Alice</text>
+      <rect x="184" y="20" width="72" height="30" rx="4" fill="var(--bg4)" stroke="var(--red)" stroke-width="1.5"/>
+      <text x="220" y="35" text-anchor="middle" fill="var(--red)" font-weight="700">Mallory</text>
+      <text x="220" y="46" text-anchor="middle" fill="var(--red)" font-size="8">(MITM)</text>
+      <rect x="363" y="20" width="72" height="30" rx="4" fill="var(--bg4)" stroke="var(--blue)" stroke-width="1.3"/>
+      <text x="399" y="39" text-anchor="middle" fill="var(--blue)" font-weight="700">Bob</text>
+      <!-- Lifelines -->
+      <line x1="41" y1="50" x2="41" y2="205" stroke="var(--teal)" stroke-width="1" stroke-dasharray="4,3" opacity=".5"/>
+      <line x1="220" y1="50" x2="220" y2="205" stroke="var(--red)" stroke-width="1" stroke-dasharray="4,3" opacity=".5"/>
+      <line x1="399" y1="50" x2="399" y2="205" stroke="var(--blue)" stroke-width="1" stroke-dasharray="4,3" opacity=".5"/>
+      <!-- Phase 1: Alice→Mallory (g^a) -->
+      <line x1="43" y1="72" x2="216" y2="72" stroke="var(--teal)" stroke-width="1.3" marker-end="url(#dh-arr)"/>
+      <text x="130" y="68" text-anchor="middle" fill="var(--teal)" font-size="9">g^a mod N</text>
+      <!-- Phase 2: Mallory intercepts, sends g^m1 to Alice -->
+      <line x1="218" y1="90" x2="44" y2="90" stroke="var(--red)" stroke-width="1.3" marker-end="url(#dh-arr-r)"/>
+      <text x="130" y="86" text-anchor="middle" fill="var(--red)" font-size="9">g^m₁ mod N ← Mallorys Wert!</text>
+      <!-- Phase 3: Mallory→Bob (g^m2) -->
+      <line x1="222" y1="110" x2="395" y2="110" stroke="var(--red)" stroke-width="1.3" marker-end="url(#dh-arr-r)"/>
+      <text x="310" y="106" text-anchor="middle" fill="var(--red)" font-size="9">g^m₂ mod N ← Mallorys Wert!</text>
+      <!-- Phase 4: Bob→Mallory (g^b) -->
+      <line x1="397" y1="128" x2="224" y2="128" stroke="var(--blue)" stroke-width="1.3" marker-end="url(#dh-arr)"/>
+      <text x="310" y="124" text-anchor="middle" fill="var(--blue)" font-size="9">g^b mod N</text>
+      <!-- Keys established -->
+      <rect x="5" y="145" width="92" height="28" rx="3" fill="rgba(224,84,84,.1)" stroke="var(--red)"/>
+      <text x="51" y="157" text-anchor="middle" fill="var(--red)" font-size="8.5" font-weight="700">K_AM = g^(a·m₁)</text>
+      <text x="51" y="169" text-anchor="middle" fill="var(--text3)" font-size="7.5">Alice denkt: Bob</text>
+      <rect x="174" y="145" width="92" height="28" rx="3" fill="rgba(224,84,84,.2)" stroke="var(--red)" stroke-width="1.5"/>
+      <text x="220" y="157" text-anchor="middle" fill="var(--red)" font-size="8.5" font-weight="700">K_AM &amp; K_MB</text>
+      <text x="220" y="169" text-anchor="middle" fill="var(--red)" font-size="7.5">Mallory liest mit!</text>
+      <rect x="343" y="145" width="92" height="28" rx="3" fill="rgba(224,84,84,.1)" stroke="var(--red)"/>
+      <text x="389" y="157" text-anchor="middle" fill="var(--red)" font-size="8.5" font-weight="700">K_MB = g^(b·m₂)</text>
+      <text x="389" y="169" text-anchor="middle" fill="var(--text3)" font-size="7.5">Bob denkt: Alice</text>
+      <!-- Footer -->
+      <rect x="90" y="184" width="260" height="20" rx="3" fill="rgba(86,184,112,.1)" stroke="var(--green)"/>
+      <text x="220" y="197" text-anchor="middle" fill="var(--green)" font-size="8.5">✓ Lösung: DH + Zertifikat (PKI) → Mallory kann g^a nicht fälschen</text>
+    </svg>
+  </div>
 </section>
 
   <!-- RSA Rechner -->
@@ -1166,6 +1301,13 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">Cryptocalypse · ECC · PQC · Zufallszahlen · Fortuna</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>Warum bedroht der Quantencomputer RSA und DH, aber nicht AES-256?</li>
+    <li>Shor-Algorithmus und Q-Day (~2029) einordnen</li>
+    <li>ML-KEM (KYBER) als Post-Quantum-Ersatz nennen</li>
+    <li>PRNG vs. CSPRNG unterscheiden; Backtracking Protection erklären</li>
+    <li>Fortuna-Architektur und Entropiequellen benennen</li>
+  </ul></details>
 
   <div class="g2r">
     <div>
@@ -1299,6 +1441,12 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">OSI-Stack · Angriffe · Replay · Sequenzdiagramme</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>OSI-Schichten benennen und Protokolle zuordnen (HTTP, TCP, IP, Ethernet)</li>
+    <li>Spoofing, DoS, MITM und Replay-Angriffe auf OSI-Ebenen einordnen</li>
+    <li>Replay-Angriff im Sequenzdiagramm nachvollziehen</li>
+    <li>Gegenmaßnahmen gegen Replay (Nonces, Timestamps, Sequenznummern)</li>
+  </ul></details>
 
   <h3>OSI-Schichtenmodell</h3>
   <div class="viz">
@@ -1414,6 +1562,13 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">Was ist TLS · Ciphersuites · Handshake · PFS · POODLE/FREAK</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>TLS-Schutzziele und Schichtenposition benennen</li>
+    <li>Unterschied TLS 1.2 vs. 1.3 Ciphersuite-Format und Handshake-RTTs</li>
+    <li>Perfect Forward Secrecy (ECDHE/DHE) erklären</li>
+    <li>POODLE, FREAK, SMACK als Downgrade-Angriffe klassifizieren</li>
+    <li>CertificateVerify-Nachricht im Handshake erklären</li>
+  </ul></details>
 
   <div class="g2">
     <div class="box teal">
@@ -1432,6 +1587,7 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
     </div>
   </div>
 
+  <div class="callout-practice"><strong>In der Praxis:</strong> TLS 1.3 ist seit 2018 RFC 8446 und wird von allen modernen Browsern, nginx, Apache und curl unterstützt. TLS 1.0/1.1 sind seit 2021 per RFC 8996 deprecated. HTTPS-Verbindungen (erkennbar am Schloss im Browser) nutzen heute TLS 1.3 mit ECDHE + AES-256-GCM oder ChaCha20-Poly1305.</div>
   <h3>TLS 1.2 vs. TLS 1.3: Ciphersuite-Format</h3>
   <div class="tabs">
     <button class="tab-btn active" onclick="tab('tls','13',this)">TLS 1.3</button>
@@ -1588,7 +1744,15 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
       <div class="sec-sub">X.509 · Zertifikatsketten · Kerberos · Passwörter · 2FA</div>
     </div>
   </div>
+  <details class="lernziele"><summary>Lernziele</summary><ul>
+    <li>X.509-Pflichtfelder (Subject, Issuer, pathlen, CA-Flag) benennen</li>
+    <li>Zertifikatskette von Leaf bis Root CA nachvollziehen</li>
+    <li>Kerberos-Ablauf: AS, TGS, TGT, Service Ticket erklären</li>
+    <li>Passwort-Speicher-Evolutionsstufen und ihre Schwächen kennen</li>
+    <li>TOTP-Prinzip und 2FA-Faktoren (Wissen, Besitz, Inhärenz) erklären</li>
+  </ul></details>
 
+  <div class="callout-practice"><strong>In der Praxis:</strong> Let's Encrypt (gratis, automatisiert) stellt heute >300 Mio. X.509-Zertifikate aus und hat HTTPS demokratisiert. Kerberos ist der Unterbau von Active Directory — jedes Windows-Login in Unternehmen nutzt Kerberos-Tickets. TOTP (RFC 6238) steckt hinter Google Authenticator, Authy und allen Authenticator-Apps — das 6-stellige Passwort wechselt alle 30s basierend auf HMAC-SHA1.</div>
   <h3>X.509-Zertifikate</h3>
   <div class="g2r">
     <div>
@@ -1719,24 +1883,24 @@ pre .kw{color:var(--purple)}pre .fn{color:var(--blue)}pre .cm{color:var(--text3)
   <h3>Passwörter sicher speichern</h3>
   <div class="g3">
     <div class="card">
-      <h4 style="color:var(--red)">❌ Klartext</h4>
+      <h4 style="color:var(--red)">❌ Klartext <span class="badge b-bad">🔴 Katastrophal</span></h4>
       <p style="font-size:13px">Passwort direkt gespeichert. Datenbankeinbruch → alle Passwörter sofort lesbar.</p>
       <div class="math" style="font-size:12px">Speicher: password</div>
     </div>
     <div class="card">
-      <h4 style="color:var(--accent)">⚠ Nur H(pw)</h4>
+      <h4 style="color:var(--accent)">⚠ Nur H(pw) <span class="badge b-bad">🔴 Unzureichend</span></h4>
       <p style="font-size:13px">Angreifer baut <strong>Rainbow Tables</strong> (Vorab-Hashes häufiger Passwörter). Einmal berechnet → für jeden Server wiederverwendbar.</p>
       <div class="math" style="font-size:12px">Speicher: SHA256("geheim")</div>
     </div>
     <div class="card">
-      <h4 style="color:var(--accent)">⚠ H(salt ∥ pw)</h4>
+      <h4 style="color:var(--accent)">⚠ H(salt ∥ pw) <span class="badge b-warn">🟡 Veraltet</span></h4>
       <p style="font-size:13px">Salt macht Rainbow Tables nutzlos. Aber: GPUs berechnen Milliarden SHA-256-Hashes/Sekunde. Salt allein reicht heute nicht!</p>
       <div class="math" style="font-size:12px">Speicher: (salt, H(salt‖pw))</div>
     </div>
   </div>
   <div class="box green" style="margin-top:10px">
-    <div class="lbl">Richtig: Langsame KDF (Argon2, bcrypt, scrypt)</div>
-    <code>Speicher: (salt, Argon2(salt‖pw, i=3, m=65536, p=4))</code><br><br>
+    <div class="lbl">✅ Richtig: Langsame KDF — <span class="badge b-ok">🟢 Argon2id</span> &nbsp;<span class="badge b-ok">🟢 bcrypt</span> &nbsp;<span class="badge b-warn">🟡 scrypt</span> &nbsp;<span class="badge b-warn">🟡 PBKDF2</span></div>
+    <code>Speicher: (salt, Argon2id(salt‖pw, i=3, m=65536, p=4))</code><br><br>
     Einstellbare Laufzeit macht GPU-Angriffe unlösbar. Salt ist zufällig und <strong>pro Nutzer eindeutig</strong>. KDF ist <em>absichtlich langsam</em> — das ist kein Bug, sondern Feature.
   </div>
 
@@ -2116,6 +2280,186 @@ function freqAnalysis(){
 }
 freqAnalysis();
 
+// ── ECB Penguin Demo ──
+function ecbPenguinDraw(){
+  const el=document.getElementById('ecb-demo');
+  if(!el)return;
+  // 8×10 pixel penguin: 0=sky, 1=body, 2=belly, 3=beak/feet
+  const G=[
+    [0,0,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0],
+    [0,1,1,2,2,1,1,0],
+    [0,1,1,2,2,1,1,0],
+    [0,1,3,2,2,3,1,0],
+    [0,1,1,1,1,1,1,0],
+    [0,1,2,2,2,2,1,0],
+    [0,1,2,2,2,2,1,0],
+    [0,3,3,1,1,3,3,0],
+    [0,0,0,0,0,0,0,0],
+  ];
+  const orig=['#1e3654','#111318','#dce0e8','#e8a020'];
+  // ECB: same plaintext block → same ciphertext block (different color, same pattern)
+  const ecb =['#3d647f','#7a1f24','#6b3d88','#2d7a4f'];
+  const CS=11, COLS=8, ROWS=10, GAP=22, LH=16;
+  const svgW=3*(COLS*CS)+2*GAP;
+  const svgH=ROWS*CS+LH+24;
+  const cx=c=>Math.round(c*CS+CS/2);
+  const label=(tx,t,col)=>`<text x="${tx}" y="12" text-anchor="middle" fill="${col}" font-size="8.5" font-weight="700">${t}</text>`;
+  const grid=(ox,fn)=>{
+    let s='';
+    for(let r=0;r<ROWS;r++)
+      for(let c=0;c<COLS;c++)
+        s+=`<rect x="${ox+c*CS}" y="${LH+r*CS}" width="${CS}" height="${CS}" fill="${fn(r,c)}"/>`;
+    return s;
+  };
+  const cbcCol=(r,c)=>{
+    const v=Math.sin((r*COLS+c+1)*2.399)*100000; const f=v-Math.floor(v);
+    const v2=Math.sin((r*COLS+c+1)*1.618)*100000; const f2=v2-Math.floor(v2);
+    return `hsl(${Math.floor(f*360)},55%,${30+Math.floor(f2*35)}%)`;
+  };
+  const ox0=0, ox1=COLS*CS+GAP, ox2=2*(COLS*CS+GAP);
+  const mid=c=>Math.round(c+COLS*CS/2);
+  let svg=`<svg viewBox="0 0 ${svgW} ${svgH}" style="width:100%;max-width:380px;height:auto;display:block;margin:0 auto" font-family="var(--sans)">`;
+  svg+=label(mid(ox0),'Original','var(--text3)');
+  svg+=label(mid(ox1),'ECB — Muster sichtbar!','var(--red)');
+  svg+=label(mid(ox2),'CBC/GCM — sicher','var(--green)');
+  svg+=grid(ox0,(r,c)=>orig[G[r][c]]);
+  svg+=grid(ox1,(r,c)=>ecb[G[r][c]]);
+  svg+=grid(ox2,cbcCol);
+  // caption
+  const cy=LH+ROWS*CS+13;
+  svg+=`<text x="${svgW/2}" y="${cy}" text-anchor="middle" fill="var(--text3)" font-size="8">ECB bewahrt Pixelmuster, weil gleiche Pixel-Werte → gleiche verschlüsselte Farbe. CBC/GCM sehen wie Rauschen aus.</text>`;
+  svg+='</svg>';
+  el.innerHTML=svg;
+}
+ecbPenguinDraw();
+
+// ── Avalanche-Effekt ──
+async function sha256hex(str){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function avalanche(){
+  const a=document.getElementById('av-a')?.value??'';
+  const b=document.getElementById('av-b')?.value??'';
+  const el=document.getElementById('av-out');
+  if(!el)return;
+  const [ha,hb]=await Promise.all([sha256hex(a),sha256hex(b)]);
+  // Count differing bits
+  let diffBits=0;
+  const bitsA=[], bitsB=[];
+  for(let i=0;i<ha.length;i+=2){
+    const ba=parseInt(ha.slice(i,i+2),16), bb=parseInt(hb.slice(i,i+2),16);
+    const xor=ba^bb;
+    for(let bit=7;bit>=0;bit--){
+      const bitA=(ba>>bit)&1, bitB=(bb>>bit)&1;
+      bitsA.push(bitA); bitsB.push(bitB);
+      if(bitA!==bitB)diffBits++;
+    }
+  }
+  const pct=Math.round(diffBits/256*100);
+  const hue=pct>=40&&pct<=60?120:pct>=25?60:0; // green≈50%, yellow=off, red=bad
+  // Build bit grid SVGs
+  const BW=7,BH=7,COLS=32,ROWS=8,GAP=4;
+  const svgW=COLS*BW+(COLS-1)*1, svgH=ROWS*(BH+1)-1;
+  const bitGrid=(bits,ha)=>{
+    let s=`<svg viewBox="0 0 ${svgW} ${svgH}" style="width:100%;height:auto;display:block" font-family="var(--mono)">`;
+    for(let i=0;i<256;i++){
+      const r=Math.floor(i/COLS), c=i%COLS;
+      const changed= bits===bitsB && bitsA[i]!==bitsB[i];
+      const fill= bits[i]===1?(changed?'var(--red)':'var(--accent)'):(changed?'var(--red)':'var(--bg4)');
+      s+=`<rect x="${c*(BW+1)}" y="${r*(BH+1)}" width="${BW}" height="${BH}" fill="${fill}" rx="1"/>`;
+    }
+    return s+'</svg>';
+  };
+  el.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px">
+      <div>
+        <div style="font-size:9px;color:var(--text3);margin-bottom:3px;font-family:var(--mono)">SHA-256(A) = ${ha.slice(0,16)}…</div>
+        ${bitGrid(bitsA,ha)}
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--text3);margin-bottom:3px;font-family:var(--mono)">SHA-256(B) = ${hb.slice(0,16)}…</div>
+        ${bitGrid(bitsB,hb)}
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="flex:1;height:8px;background:var(--bg4);border-radius:4px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:hsl(${hue},70%,48%);border-radius:4px;transition:width .3s"></div>
+      </div>
+      <span style="font-family:var(--mono);font-size:12px;color:hsl(${hue},70%,60%);white-space:nowrap">${diffBits}/256 Bits (${pct}%) geändert</span>
+    </div>
+    <div style="font-size:11px;color:var(--text3);margin-top:4px">Rote Bits = geflippt. Ideal ~50% (${128} Bit). <span style="color:var(--teal)">Gleicher Input → exakt 0% Differenz.</span></div>`;
+}
+avalanche();
+
+// ── Length Extension Attack Demo ──
+// Uses a simplified Merkle-Damgård-style toy hash (not real SHA-256) to illustrate
+// the structural weakness of H(K||m).
+function leaToyHash(str){
+  // 32-bit toy hash (Merkle-Damgård-like): demonstrates LEA without real SHA-256 internals
+  let state=0x6a09e667;
+  const bytes=new TextEncoder().encode(str);
+  // padding to 4-byte blocks
+  const padded=[...bytes,0x80];
+  while(padded.length%4!==0)padded.push(0);
+  const lenBytes=new DataView(new ArrayBuffer(4));
+  lenBytes.setUint32(0,bytes.length*8,false);
+  for(let i=0;i<4;i++)padded.push(lenBytes.getUint8(i));
+  for(let i=0;i<padded.length;i+=4){
+    const block=((padded[i]<<24)|(padded[i+1]<<16)|(padded[i+2]<<8)|padded[i+3])>>>0;
+    state=(Math.imul(state^block,0x9e3779b9)>>>0);
+    state=((state<<13)|(state>>>19))>>>0;
+    state=(Math.imul(state,0x85ebca6b)>>>0);
+  }
+  return state.toString(16).padStart(8,'0');
+}
+function leaPadding(msgLen){
+  // Show the Merkle-Damgård padding that gets appended after the message
+  const p=[0x80];
+  const total=msgLen+1;
+  const needed=(4-total%4)%4;
+  for(let i=0;i<needed;i++)p.push(0x00);
+  // 4-byte length field
+  const lv=msgLen*8;
+  p.push((lv>>>24)&0xff,(lv>>>16)&0xff,(lv>>>8)&0xff,lv&0xff);
+  return p.map(b=>'\\x'+b.toString(16).padStart(2,'0')).join('');
+}
+function leaCalc(){
+  const K=document.getElementById('lea-k')?.value??'';
+  const m=document.getElementById('lea-m')?.value??'';
+  const ext=document.getElementById('lea-ext')?.value??'';
+  const el=document.getElementById('lea-out');
+  if(!el)return;
+  const km=K+m;
+  const hkm=leaToyHash(km);
+  const pad=leaPadding(km.length);
+  const forged=km+pad.replace(/\\x../g,c=>String.fromCharCode(parseInt(c.slice(2),16)))+ext;
+  const hForged=leaToyHash(forged);
+  const hHMAC=leaToyHash(K+leaToyHash(m+K)); // simplified HMAC-like (not real HMAC)
+  el.innerHTML=`
+  <div style="font-size:12px;font-family:var(--mono);display:grid;gap:6px">
+    <div style="background:var(--bg3);border-radius:4px;padding:8px">
+      <span style="color:var(--text3);font-size:10px">Server berechnet und sendet:</span><br>
+      <span style="color:var(--accent)">H(K ∥ m)</span> = <span style="color:var(--blue)">${hkm}</span>
+      <span style="font-size:10px;color:var(--text3);margin-left:6px">für m = "${m}"</span>
+    </div>
+    <div style="background:rgba(224,84,84,.08);border:1px solid var(--red);border-radius:4px;padding:8px">
+      <span style="color:var(--red);font-size:10px;font-weight:700">⚠ Angreifer kennt nur H(K∥m) und |K∥m| — und kann trotzdem fälschen:</span><br>
+      <span style="color:var(--text3);font-size:10px">Padding nach m:</span> <span style="color:var(--purple);font-size:10px">${pad}</span><br>
+      <span style="color:var(--text3);font-size:10px">Gefälschte Nachricht:</span> m ∥ pad ∥ <span style="color:var(--red)">"${ext}"</span><br>
+      <span style="color:var(--accent)">H(K ∥ m ∥ pad ∥ m')</span> = <span style="color:var(--red)">${hForged}</span>
+      <span style="font-size:10px;color:var(--red);margin-left:4px">← gültiger MAC ohne K zu kennen!</span>
+    </div>
+    <div style="background:rgba(86,184,112,.08);border:1px solid var(--green);border-radius:4px;padding:8px">
+      <span style="color:var(--green);font-size:10px;font-weight:700">✓ HMAC ist immun (inneres + äußeres Hashing):</span><br>
+      <span style="color:var(--accent)">HMAC(K, m)</span> = <span style="color:var(--green)">${hHMAC}</span>
+      <span style="font-size:10px;color:var(--text3);margin-left:4px">— Extension-Trick funktioniert nicht</span>
+    </div>
+  </div>`;
+}
+leaCalc();
+
 // ── Birthday Paradox ──
 function bdCalc(){
   const N=+document.getElementById('bd-n').value;
@@ -2157,6 +2501,8 @@ function rsaCalc(){
   if(d===null)return out.innerHTML='<div class="box red"><div class="lbl">Fehler</div>Kein modulares Inverses gefunden.</div>';
   if(m>=N)return out.innerHTML=`<div class="box red"><div class="lbl">Fehler</div>Nachricht m=${mv} muss kleiner als N=${N} sein!</div>`;
   const c=modPowB(m,e,N),dec=modPowB(c,d,N);
+  const sig=modPowB(m,d,N), ver=modPowB(sig,e,N);
+  const deVerify=(d*e)%phi;
   out.innerHTML=`
     <div class="g2" style="margin-top:10px">
       <div class="box"><div class="lbl">Schlüsselgenerierung</div>
@@ -2178,7 +2524,36 @@ function rsaCalc(){
         m = ${c}<sup>${d}</sup> mod ${N} = <strong style="font-size:16px">${dec}</strong>
         ${dec===m?'<br><span style="color:var(--green)">✓ Korrekt!</span>':'<br><span style="color:var(--red)">✗ Fehler</span>'}
       </div>
-    </div>`;
+    </div>
+    <div class="g2" style="margin-top:8px">
+      <div class="box" style="border-color:var(--purple)"><div class="lbl" style="background:var(--purple)">Signieren: S = m<sup>d</sup> mod N (K_priv)</div>
+        S = ${m}<sup>${d}</sup> mod ${N} = <strong style="font-size:15px;color:var(--purple)">${sig}</strong>
+      </div>
+      <div class="box" style="border-color:var(--purple)"><div class="lbl" style="background:var(--purple)">Verifizieren: S<sup>e</sup> mod N =? m (K_pub)</div>
+        ${sig}<sup>${e}</sup> mod ${N} = <strong style="font-size:15px;color:var(--purple)">${ver}</strong>
+        ${ver===m?'<br><span style="color:var(--green)">✓ Signatur gültig!</span>':'<br><span style="color:var(--red)">✗ Fehler</span>'}
+      </div>
+    </div>
+    <details style="margin-top:10px;cursor:pointer">
+      <summary style="font-size:12px;color:var(--teal);font-weight:700;padding:6px 0;user-select:none">▶ Schritt-für-Schritt Ableitung (aufklappen)</summary>
+      <div style="font-family:var(--mono);font-size:12px;line-height:1.9;background:var(--bg3);border-radius:6px;padding:12px;margin-top:6px;border:1px solid var(--border)">
+        <span style="color:var(--text3)">① Schlüsselgenerierung</span><br>
+        &nbsp; p = ${p} (Primzahl), q = ${q} (Primzahl)<br>
+        &nbsp; N = p · q = ${p} · ${q} = <span style="color:var(--accent)">${N}</span><br>
+        &nbsp; φ(N) = (p−1)·(q−1) = ${p-1n} · ${q-1n} = <span style="color:var(--accent)">${phi}</span><br>
+        &nbsp; e = ${e} → ggT(${e}, ${phi}) = ${gcdB(e,phi)} <span style="color:var(--green)">✓ teilerfremd</span><br>
+        &nbsp; d = e⁻¹ mod φ(N): Erweiterter Euklidischer Algorithmus → d = <span style="color:var(--accent)">${d}</span><br>
+        &nbsp; Probe: d · e mod φ(N) = ${d} · ${e} mod ${phi} = <span style="color:var(--green)">${deVerify}</span> ✓<br><br>
+        <span style="color:var(--text3)">② Verschlüsseln (Bob mit K_pub)</span><br>
+        &nbsp; C = m<sup>e</sup> mod N = ${m}<sup>${e}</sup> mod ${N} = <span style="color:var(--blue)">${c}</span><br><br>
+        <span style="color:var(--text3)">③ Entschlüsseln (Alice mit K_priv)</span><br>
+        &nbsp; m = C<sup>d</sup> mod N = ${c}<sup>${d}</sup> mod ${N} = <span style="color:var(--green)">${dec}</span><br>
+        &nbsp; Korrektheit: m<sup>e·d</sup> ≡ m<sup>1</sup> ≡ m (mod N) — Euler's Theorem<br><br>
+        <span style="color:var(--text3)">④ Signieren (Alice mit K_priv, umgekehrte Reihenfolge)</span><br>
+        &nbsp; S = m<sup>d</sup> mod N = ${m}<sup>${d}</sup> mod ${N} = <span style="color:var(--purple)">${sig}</span><br>
+        &nbsp; Jeder: S<sup>e</sup> mod N = ${sig}<sup>${e}</sup> mod ${N} = <span style="color:var(--green)">${ver}</span> = m ✓
+      </div>
+    </details>`;
 }
 rsaCalc();
 
